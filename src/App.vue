@@ -52,5 +52,8 @@ export default {
   data: () => ({
     //
   }),
+  mounted() {
+    console.log(process.env);
+  },
 };
 </script>
