@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Map from '@/views/Map.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Main from '@/views/Main.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 export default new VueRouter({
   mode: 'history',
@@ -11,7 +11,7 @@ export default new VueRouter({
     {
       path: '/',
       name: 'home',
-      component: Map,
+      component: Main,
     },
     {
       path: '/about',
@@ -19,7 +19,8 @@ export default new VueRouter({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+      component: () =>
+        import(/* webpackChunkName: "about" */ '../views/About.vue'),
     },
   ],
-})
+});

@@ -1,6 +1,6 @@
 <template>
-  <v-container pa-0>
-    <div id="map" class="map" ref="map" />
+  <v-container pa-0 fluid>
+    <div id="map" class="map"></div>
   </v-container>
 </template>
 
@@ -9,7 +9,7 @@ import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
+import {OSM, XYZ} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import {GeoJSON} from 'ol/format';
@@ -32,7 +32,6 @@ export default {
   data: () => ({}),
   methods: {
     createMap() {
-      console.log(this.$refs.map);
       proj4.defs(
         `EPSG:2180`,
         '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
@@ -50,6 +49,12 @@ export default {
         layers: [
           new TileLayer({
             source: new OSM(),
+          }),
+          new TileLayer({
+            source: new XYZ({
+              url:
+                'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicDR0cnlraiIsImEiOiJjazExeWNyN3cwankzM2JwNmNtOHgzNXg5In0.StjLw-qURyTLbAZKWxZl2g',
+            }),
           }),
           new VectorLayer({
             name: 'units',
@@ -73,15 +78,19 @@ export default {
       window.map = this.map;
     },
   },
-  created() {
+  mounted() {
     this.createMap();
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .map {
   width: 100%;
-  height: 400px;
+  height: 100vh;
+  .ol-zoom {
+    left: unset;
+    right: 0.5em !important;
+  }
 }
 </style>
