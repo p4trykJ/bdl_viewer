@@ -45,12 +45,12 @@
                   <v-tab-item>
                     <Categories
                       @requestCompleted.once="cardLoading = false"
-                      @formFilled="activeTab = 1"
+                      @formFilled.once="activeTab = 1"
                     >
                     </Categories>
                   </v-tab-item>
                   <v-tab-item>
-                    b a
+                    <Data></Data>
                   </v-tab-item>
                   <v-tab-item>
                     aac
@@ -58,7 +58,6 @@
                 </v-tabs-items>
               </v-tabs>
             </v-card-text>
-
             <v-card-actions>
               <v-spacer></v-spacer>
               <!-- <v-btn icon>
@@ -84,7 +83,7 @@
         </v-menu>
       </v-col>
     </v-row>
-    <v-row class="menus menus--layers">
+    <!-- <v-row class="menus menus--layers">
       <v-col cols="12" sm="12">
         <v-menu offset-y>
           <template v-slot:activator="{on}">
@@ -95,19 +94,21 @@
           aaa
         </v-menu>
       </v-col>
-    </v-row>
+    </v-row> -->
   </v-container>
 </template>
 
 <script>
 import Map from '@/components/Map.vue';
 import Categories from '@/components/Categories.vue';
+import Data from '@/components/Data.vue';
 
 export default {
   name: 'Main',
   components: {
     Map,
     Categories,
+    Data,
   },
   data: () => ({
     mainMenuVisible: true,
@@ -124,7 +125,11 @@ export default {
       },
     },
   },
-  methods: {},
+  methods: {
+    onFormFilled(data) {
+      console.log('TCL: onFormFilled -> data', data);
+    },
+  },
   mounted() {},
 };
 </script>

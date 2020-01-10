@@ -40,7 +40,7 @@
           label="Podgrupa tematyczna"
           :rules="[rules.required]"
           :items="subgroups"
-          @change="formFilled"
+          @change="onFormFilled"
         >
         </v-autocomplete>
       </v-col>
@@ -71,15 +71,20 @@ export default {
     getSubjects(level, parentID = null) {
       this.$store.dispatch('getSubjects', {'parent-id': parentID}).then(r => {
         this[level] = r.data.results;
-        console.log(this[`${level}Subjects`]);
-        console.log(this.mainSubject);
         setTimeout(() => {
           this.$emit('requestCompleted');
         }, 1000);
       });
     },
     onFormFilled() {
-      this.$emit('formFilled');
+      this.$store
+        .dispatch('getVariables', {
+          'subject-id': this.subgroupSubject,
+        })
+        .then(r => {
+          this.$store.commit('setVariables', r.data.results);
+          this.$emit('formFilled', r.data.results);
+        });
     },
   },
   created() {

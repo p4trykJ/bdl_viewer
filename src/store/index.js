@@ -17,12 +17,25 @@ axios.interceptors.request.use(
       },
       config.headers
     );
-    console.log(config);
     return config;
   },
   error => {
-    console.log('TCL: error', error);
     // Do something with request error
+    return Promise.reject(error);
+  }
+);
+axios.interceptors.response.use(
+  config => {
+    if (config.statusText === 'OK') {
+      return config;
+    }
+  },
+  error => {
+    vm.$root.$emit(
+      'showSnackbar',
+      error.response.data.errors[0].errorReason,
+      'error'
+    );
     return Promise.reject(error);
   }
 );
@@ -32,15 +45,29 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     drawerVisibility: false,
+    variables: [],
+    variable: undefined,
   },
   getters: {
     getDrawerVisibility(state) {
       return state.drawerVisibility;
     },
+    getVariables(state) {
+      return state.variables;
+    },
+    getVariable(state) {
+      return state.variable;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
       state.drawerVisibility = value;
+    },
+    setVariables(state, value) {
+      state.variables = value;
+    },
+    setVariable(state, value) {
+      state.variable = value;
     },
   },
   actions: {
@@ -50,12 +77,29 @@ export default new Vuex.Store({
         url: 'subjects',
         params: payload,
       })
-        .then(r => {
-          if (r.data) {
-            return r;
-          }
-          return false;
-        })
+        .then(r => r)
+        .catch(e => {
+          // console.log(e.response.data);
+          return e;
+        });
+    },
+    getVariables(ctx, payload) {
+      return axios({
+        method: 'get',
+        url: 'variables',
+        params: payload,
+      })
+        .then(r => r)
+        .catch(e => {
+          return e;
+        });
+    },
+    getVariable(ctx, id) {
+      return axios({
+        method: 'get',
+        url: `variables/${id}`,
+      })
+        .then(r => r)
         .catch(e => {
           return e;
         });

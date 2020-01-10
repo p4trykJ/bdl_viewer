@@ -21,9 +21,9 @@ import {
   // Circle
 } from 'ol/style';
 // import {fromLonLat} from 'ol/proj';
-import proj4 from 'proj4';
-import {register} from 'ol/proj/proj4';
-import {get as getProjection} from 'ol/proj';
+// import proj4 from 'proj4';
+// import {register} from 'ol/proj/proj4';
+// import {get as getProjection} from 'ol/proj';
 import {defaults as defaultControls} from 'ol/control';
 // import ClassyBrew from "classybrew";
 
@@ -32,18 +32,11 @@ export default {
   data: () => ({}),
   methods: {
     createMap() {
-      proj4.defs(
-        `EPSG:2180`,
-        '+proj=tmerc +lat_0=0 +lon_0=19 +k=0.9993 +x_0=500000 +y_0=-5300000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-      );
-      register(proj4);
-      const projection = getProjection(`EPSG:2180`);
       this.map = new Map({
         target: 'map',
         view: new View({
-          center: [613210.1716084608, 486368.7354932723],
-          zoom: 7.2,
-          projection,
+          center: [1871831.8566897807, 6884288.3839664385],
+          zoom: 6.6,
         }),
         controls: defaultControls(),
         layers: [
@@ -53,7 +46,7 @@ export default {
           new TileLayer({
             source: new XYZ({
               url:
-                'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicDR0cnlraiIsImEiOiJjazExeWNyN3cwankzM2JwNmNtOHgzNXg5In0.StjLw-qURyTLbAZKWxZl2g',
+                'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoicDR0cnlraiIsImEiOiJjazExeWNyN3cwankzM2JwNmNtOHgzNXg5In0.StjLw-qURyTLbAZKWxZl2g',
             }),
           }),
           new VectorLayer({

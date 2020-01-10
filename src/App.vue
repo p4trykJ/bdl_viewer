@@ -7,7 +7,18 @@
     </v-app-bar>
     <!-- Side menu -->
 
-    <v-navigation-drawer app v-model="drawerVisibility"></v-navigation-drawer>
+    <v-navigation-drawer app v-model="drawerVisibility" temporary>
+      <v-row>
+        <v-spacer></v-spacer>
+        <v-col cols="auto" class="pt-1">
+          <v-btn icon @click="drawerVisibility = !drawerVisibility">
+            <v-icon>
+              mdi-close
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-navigation-drawer>
 
     <!-- Sizes your content based upon application components -->
     <v-content>
@@ -17,6 +28,12 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+    <v-snackbar v-model="snackbar" :color="color" :timeout="timeout">
+      {{ snackbarText }}
+      <v-icon color="white" @click="snackbar = false">
+        mdi-close
+      </v-icon>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -24,7 +41,12 @@
 export default {
   name: 'App',
   components: {},
-  data: () => ({}),
+  data: () => ({
+    snackbar: false,
+    snackbarText: '',
+    color: '',
+    timeout: 0,
+  }),
   computed: {
     drawerVisibility: {
       get() {
@@ -35,7 +57,17 @@ export default {
       },
     },
   },
-  mounted() {},
+  methods: {
+    showSnackbar(text, color = 'success', timeout = 5000) {
+      this.snackbar = true;
+      this.snackbarText = text;
+      this.timeout = timeout;
+      this.color = color;
+    },
+  },
+  mounted() {
+    this.$root.$on('showSnackbar', this.showSnackbar);
+  },
 };
 </script>
 
