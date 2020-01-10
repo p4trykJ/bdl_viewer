@@ -13,23 +13,20 @@ import {OSM, XYZ} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import {GeoJSON} from 'ol/format';
-// import Collection from 'ol/Collection';
 import {
   Style,
   Stroke,
   Fill,
   // Circle
 } from 'ol/style';
-// import {fromLonLat} from 'ol/proj';
-// import proj4 from 'proj4';
-// import {register} from 'ol/proj/proj4';
-// import {get as getProjection} from 'ol/proj';
 import {defaults as defaultControls} from 'ol/control';
-// import ClassyBrew from "classybrew";
+import ClassyBrew from 'classybrew';
 
 export default {
   name: 'Map',
-  data: () => ({}),
+  data: () => ({
+    brew: new ClassyBrew(),
+  }),
   methods: {
     createMap() {
       this.map = new Map({
@@ -70,9 +67,60 @@ export default {
       });
       window.map = this.map;
     },
+    prepareData() {
+      return this.$store.dispatch('getData').then(r => {
+        const dataArray = [];
+        r.data.results.forEach(res => {
+          const value = res.values[0].val;
+          dataArray.push(value);
+          const feature = this.getLayerFeatures('units').find(
+            unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
+          );
+          feature.set('value', value);
+        });
+        return dataArray;
+      });
+    },
+    drawCartogram() {
+      this.prepareData().then(data => {
+        this.brew.setSeries(data);
+        this.brew.setNumClasses(Number(this.$store.getters.getClassesAmount));
+        this.brew.setColorCode(this.$store.getters.getColorRamp);
+        this.brew.classify(this.$store.getters.getClassifyMethod);
+        this.getLayerByName('units').setStyle(feature => {
+          const styles = [];
+          styles.push(
+            new Style({
+              fill: new Fill({
+                color: this.brew.getColorInRange(feature.get('value')),
+              }),
+              stroke: new Stroke({
+                color: '#000000',
+                width: 1,
+              }),
+            })
+          );
+          return styles;
+        });
+      });
+    },
+    getLayerByName(name) {
+      return this.map
+        .getLayers()
+        .getArray()
+        .find(layer => {
+          return name === String(layer.get('name'));
+        });
+    },
+    getLayerFeatures(name) {
+      return this.getLayerByName(name)
+        .getSource()
+        .getFeatures();
+    },
   },
   mounted() {
     this.createMap();
+    this.$root.$on('drawCartogram', this.drawCartogram);
   },
 };
 </script>

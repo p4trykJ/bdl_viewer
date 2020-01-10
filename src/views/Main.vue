@@ -53,7 +53,7 @@
                     <Data></Data>
                   </v-tab-item>
                   <v-tab-item>
-                    aac
+                    <Carto></Carto>
                   </v-tab-item>
                 </v-tabs-items>
               </v-tabs>
@@ -63,7 +63,7 @@
               <!-- <v-btn icon>
                 <v-icon>mdi-cancel</v-icon>
               </v-btn> -->
-              <v-btn icon title="Akceptuj">
+              <v-btn icon title="Akceptuj" @click="drawCartogram">
                 <v-icon>mdi-check-outline</v-icon>
               </v-btn>
             </v-card-actions>
@@ -100,6 +100,7 @@
 
 <script>
 import Map from '@/components/Map.vue';
+import Carto from '@/components/Carto.vue';
 import Categories from '@/components/Categories.vue';
 import Data from '@/components/Data.vue';
 
@@ -107,6 +108,7 @@ export default {
   name: 'Main',
   components: {
     Map,
+    Carto,
     Categories,
     Data,
   },
@@ -126,8 +128,8 @@ export default {
     },
   },
   methods: {
-    onFormFilled(data) {
-      console.log('TCL: onFormFilled -> data', data);
+    drawCartogram() {
+      this.$root.$emit('drawCartogram');
     },
   },
   mounted() {},

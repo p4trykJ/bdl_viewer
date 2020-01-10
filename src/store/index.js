@@ -47,6 +47,10 @@ export default new Vuex.Store({
     drawerVisibility: false,
     variables: [],
     variable: undefined,
+    chosenYears: [],
+    colorRamp: undefined,
+    classifyMethod: undefined,
+    classesAmount: undefined,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -58,6 +62,18 @@ export default new Vuex.Store({
     getVariable(state) {
       return state.variable;
     },
+    getChosenYears(state) {
+      return state.chosenYears;
+    },
+    getColorRamp(state) {
+      return state.colorRamp;
+    },
+    getClassifyMethod(state) {
+      return state.classifyMethod;
+    },
+    getClassesAmount(state) {
+      return state.classesAmount;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
@@ -68,6 +84,18 @@ export default new Vuex.Store({
     },
     setVariable(state, value) {
       state.variable = value;
+    },
+    setChosenYears(state, value) {
+      state.chosenYears = value;
+    },
+    setColorRamp(state, value) {
+      state.colorRamp = value;
+    },
+    setClassifyMethod(state, value) {
+      state.classifyMethod = value;
+    },
+    setClassesAmount(state, value) {
+      state.classesAmount = value;
     },
   },
   actions: {
@@ -98,6 +126,21 @@ export default new Vuex.Store({
       return axios({
         method: 'get',
         url: `variables/${id}`,
+      })
+        .then(r => r)
+        .catch(e => {
+          return e;
+        });
+    },
+    getData({state}) {
+      return axios({
+        method: 'get',
+        url: `data/by-variable/${state.variable.id}`,
+        params: {
+          'aggregate-id': 1,
+          'unit-level': 2,
+          years: state.chosenYears.join(','),
+        },
       })
         .then(r => r)
         .catch(e => {

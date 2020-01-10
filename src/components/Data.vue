@@ -11,11 +11,7 @@
           :rules="[rules.required]"
           :items="variables"
           @change="getVariable()"
-        >
-          <!-- <template #item="{item}">
-            {{ item.text | variableTextFilter }}
-          </template> -->
-        </v-autocomplete>
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -27,22 +23,7 @@
           outlined
           label="Lata"
           multiple
-        ></v-select>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-autocomplete
-          v-model="subgroupSubject"
-          item-text="name"
-          item-value="id"
-          outlined
-          label="Podgrupa tematyczna"
-          :rules="[rules.required]"
-          :items="subgroups"
-          @change="onFormFilled"
-        >
-        </v-autocomplete>
+        />
       </v-col>
     </v-row>
   </v-content>
@@ -54,18 +35,10 @@ export default {
   components: {},
   data: () => ({
     // components v-models
-    variable: undefined,
     chosenVariable: {
       years: [],
     },
-    chosenYears: [],
-    groupSubject: undefined,
-    subgroupSubject: undefined,
 
-    // components arrays
-    mains: [],
-    groups: [],
-    subgroups: [],
     rules: {
       required: v => !!v || 'Pole wymagane',
     },
@@ -91,6 +64,22 @@ export default {
         return variable;
       });
     },
+    variable: {
+      get() {
+        return this.$store.getters.getVariable;
+      },
+      set(value) {
+        this.$store.commit('setVariable', value);
+      },
+    },
+    chosenYears: {
+      get() {
+        return this.$store.getters.getChosenYears;
+      },
+      set(value) {
+        this.$store.commit('setChosenYears', value);
+      },
+    },
   },
   methods: {
     getVariable() {
@@ -98,17 +87,7 @@ export default {
         this.chosenVariable = r.data;
       });
     },
-    onFormFilled() {
-      this.$store
-        .dispatch('getVariables', {
-          'subject-id': this.subgroupSubject,
-        })
-        .then(r => {
-          this.this.$emit('formFilled', r.data.results);
-        });
-    },
   },
-  created() {},
 };
 </script>
 
