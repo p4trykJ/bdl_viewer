@@ -28,7 +28,7 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              <v-tabs grow centered center-active v-model="activeTab">
+              <v-tabs grow centered center-active v-model="mainMenuTab">
                 <v-tab>
                   Kategoria
                 </v-tab>
@@ -38,11 +38,11 @@
                 <v-tab>
                   Kartogramy
                 </v-tab>
-                <v-tabs-items v-model="activeTab">
+                <v-tabs-items v-model="mainMenuTab">
                   <v-tab-item>
                     <Categories
                       @requestCompleted.once="cardLoading = false"
-                      @formFilled.once="activeTab = 1"
+                      @formFilled.once="mainMenuTab = 1"
                     >
                     </Categories>
                   </v-tab-item>
@@ -98,7 +98,7 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              <v-tabs grow centered center-active v-model="activeTab">
+              <v-tabs grow centered center-active v-model="legendMenuTab">
                 <v-tab>
                   Legenda
                 </v-tab>
@@ -108,7 +108,7 @@
                 <v-tab>
                   Statystyki
                 </v-tab>
-                <v-tabs-items v-model="activeTab">
+                <v-tabs-items v-model="legendMenuTab">
                   <v-tab-item>
                     legenda
                   </v-tab-item>
@@ -116,7 +116,7 @@
                     aa
                   </v-tab-item>
                   <v-tab-item>
-                    Statystyki
+                    <Stats></Stats>
                   </v-tab-item>
                 </v-tabs-items>
               </v-tabs>
@@ -151,23 +151,33 @@
 
 <script>
 import Map from '@/components/Map.vue';
+// Main menu components
 import Carto from '@/components/Carto.vue';
 import Categories from '@/components/Categories.vue';
 import Data from '@/components/Data.vue';
+// Legend components
+import Stats from '@/components/Stats.vue';
 
 export default {
   name: 'Main',
   components: {
     Map,
+    // Main menu components
     Carto,
     Categories,
     Data,
+    // Legend components
+    Stats,
   },
   data: () => ({
+    // Main menu
     mainMenuVisible: false,
+    mainMenuTab: 0,
+
+    // Legend
     legendMenuVisible: false,
+    legendMenuTab: 0,
     cardLoading: true,
-    activeTab: 0,
   }),
   computed: {
     drawerVisibility: {
@@ -207,7 +217,7 @@ export default {
   right: 0;
 }
 .menu--legend {
-  bottom: 100px;
+  bottom: 300px;
   right: 0;
 }
 </style>
