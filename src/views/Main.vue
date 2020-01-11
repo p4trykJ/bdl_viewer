@@ -1,7 +1,7 @@
 <template>
   <v-container pa-0 fluid>
     <Map></Map>
-    <v-row class="menus menus--main">
+    <v-row class="menu menu--main">
       <v-col>
         <v-menu
           transition="slide-x-transition"
@@ -11,10 +11,7 @@
           v-model="mainMenuVisible"
         >
           <template #activator="{on}">
-            <v-btn
-              @click="mainMenuVisible = !mainMenuVisible"
-              v-show="!mainMenuVisible"
-            >
+            <v-btn v-show="!mainMenuVisible" @click="toggleMenu('mainMenu')">
               <v-icon>
                 mdi-settings-outline
               </v-icon>
@@ -24,7 +21,7 @@
             <v-card-title>
               Ustawienia
               <v-spacer></v-spacer>
-              <v-btn icon @click="mainMenuVisible = !mainMenuVisible">
+              <v-btn icon @click="toggleMenu('mainMenu')">
                 <v-icon>
                   mdi-close
                 </v-icon>
@@ -71,19 +68,73 @@
         </v-menu>
       </v-col>
     </v-row>
-    <v-row class="menus menus--legend">
+    <v-row class="menu menu--legend">
       <v-col cols="12" sm="12">
-        <v-menu offset-y>
+        <v-menu
+          transition="slide-x-reverse-transition"
+          :max-width="500"
+          :close-on-click="false"
+          :close-on-content-click="false"
+          v-model="legendMenuVisible"
+        >
           <template v-slot:activator="{on}">
-            <v-btn color="primary" dark>
+            <v-btn
+              color="primary"
+              dark
+              @click="toggleMenu('legendMenu')"
+              v-show="!legendMenuVisible"
+            >
               menu
             </v-btn>
           </template>
-          aaa
+          <v-card class="card--legend mx-auto" :loading="cardLoading">
+            <v-card-title>
+              Legenda
+              <v-spacer></v-spacer>
+              <v-btn icon @click="toggleMenu('legendMenu')">
+                <v-icon>
+                  mdi-close
+                </v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-tabs grow centered center-active v-model="activeTab">
+                <v-tab>
+                  Legenda
+                </v-tab>
+                <v-tab>
+                  Dane
+                </v-tab>
+                <v-tab>
+                  Statystyki
+                </v-tab>
+                <v-tabs-items v-model="activeTab">
+                  <v-tab-item>
+                    legenda
+                  </v-tab-item>
+                  <v-tab-item>
+                    aa
+                  </v-tab-item>
+                  <v-tab-item>
+                    Statystyki
+                  </v-tab-item>
+                </v-tabs-items>
+              </v-tabs>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <!-- <v-btn icon>
+                <v-icon>mdi-cancel</v-icon>
+              </v-btn> -->
+              <v-btn icon title="Akceptuj" @click="drawCartogram">
+                <v-icon>mdi-check-outline</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
         </v-menu>
       </v-col>
     </v-row>
-    <!-- <v-row class="menus menus--layers">
+    <!-- <v-row class="menu menu--layers">
       <v-col cols="12" sm="12">
         <v-menu offset-y>
           <template v-slot:activator="{on}">
@@ -113,7 +164,8 @@ export default {
     Data,
   },
   data: () => ({
-    mainMenuVisible: true,
+    mainMenuVisible: false,
+    legendMenuVisible: false,
     cardLoading: true,
     activeTab: 0,
   }),
@@ -131,27 +183,30 @@ export default {
     drawCartogram() {
       this.$root.$emit('drawCartogram');
     },
+    toggleMenu(menu) {
+      this[`${menu}Visible`] = !this[`${menu}Visible`];
+    },
   },
   mounted() {},
 };
 </script>
 
 <style lang="scss">
-.menus {
+.menu {
   position: absolute;
   z-index: 5;
 }
 .card--main {
   width: 500px;
 }
-.menus--main {
+.menu--main {
   top: 50px;
 }
-.menus--layers {
+.menu--layers {
   top: 0;
   right: 0;
 }
-.menus--legend {
+.menu--legend {
   bottom: 100px;
   right: 0;
 }
