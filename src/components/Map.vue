@@ -72,7 +72,6 @@ export default {
         const dataArray = [];
         r.data.results.forEach(res => {
           const value = res.values[0].val;
-          dataArray.push(value);
           const feature = this.getLayerFeatures('units').find(
             unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
           );
@@ -82,8 +81,8 @@ export default {
       });
     },
     drawCartogram() {
-      this.prepareData().then(data => {
-        this.brew.setSeries(data);
+      this.prepareData().then(() => {
+        this.brew.setSeries(this.$store.getters.getDataArray);
         this.brew.setNumClasses(Number(this.$store.getters.getClassesAmount));
         this.brew.setColorCode(this.$store.getters.getColorRamp);
         this.brew.classify(this.$store.getters.getClassifyMethod);

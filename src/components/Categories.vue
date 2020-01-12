@@ -88,7 +88,7 @@ export default {
     },
   },
   created() {
-    // this.getSubjects('mains');
+    this.getSubjects('mains');
   },
 };
 </script>

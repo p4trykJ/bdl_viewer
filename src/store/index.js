@@ -51,6 +51,8 @@ export default new Vuex.Store({
     colorRamp: undefined,
     classifyMethod: undefined,
     classesAmount: undefined,
+    dataArray: [],
+    // colorBrew: undefined,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -74,6 +76,9 @@ export default new Vuex.Store({
     getClassesAmount(state) {
       return state.classesAmount;
     },
+    getDataArray(state) {
+      return state.dataArray;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
@@ -96,6 +101,9 @@ export default new Vuex.Store({
     },
     setClassesAmount(state, value) {
       state.classesAmount = value;
+    },
+    setDataArray(state, value) {
+      state.dataArray = value;
     },
   },
   actions: {
@@ -132,7 +140,7 @@ export default new Vuex.Store({
           return e;
         });
     },
-    getData({state}) {
+    getData({state, commit}) {
       return axios({
         method: 'get',
         url: `data/by-variable/${state.variable.id}`,
@@ -142,7 +150,13 @@ export default new Vuex.Store({
           years: state.chosenYears.join(','),
         },
       })
-        .then(r => r)
+        .then(r => {
+          commit(
+            'setDataArray',
+            r.data.results.map(r => r.values[0].val)
+          );
+          return r;
+        })
         .catch(e => {
           return e;
         });
