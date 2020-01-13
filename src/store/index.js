@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import classyBrew from 'classybrew';
 
 /* eslint-disable */
 axios.interceptors.request.use(
@@ -52,7 +53,7 @@ export default new Vuex.Store({
     classifyMethod: undefined,
     classesAmount: undefined,
     dataArray: [],
-    // colorBrew: undefined,
+    colorBrew: new classyBrew(),
   },
   getters: {
     getDrawerVisibility(state) {
@@ -78,6 +79,9 @@ export default new Vuex.Store({
     },
     getDataArray(state) {
       return state.dataArray;
+    },
+    getColorBrew(state) {
+      return state.colorBrew;
     },
   },
   mutations: {
@@ -105,6 +109,28 @@ export default new Vuex.Store({
     setDataArray(state, value) {
       state.dataArray = value;
     },
+    // setColorBrew(state, value) {
+    //   if (value.method !== 'init') {
+    //     console.log(value);
+    //     console.log(this);
+    //     // state.colorBrew.object[value.method].apply(null, value.value);
+    //     console.log(
+    //       'TCL: setColorBrew -> state.colorBrew.object[value.method',
+    //       state.colorBrew.object[value.method]
+    //     );
+    //     state.colorBrew.object[value.method].apply();
+    //   } else {
+    //     state.colorBrew = value;
+    //   }
+
+    // console.log('TCL: setColorBrew -> payload', payload);
+    // state.colorBrew[value.method];
+    // console.log(
+    //   'TCL: setColorBrew -> state.colorBrew[payload.method]',
+    //   state.colorBrew
+    // );
+    // state.colorBrew[value.method].apply();
+    // },
   },
   actions: {
     getSubjects(ctx, payload) {
@@ -147,7 +173,7 @@ export default new Vuex.Store({
         params: {
           'aggregate-id': 1,
           'unit-level': 2,
-          years: state.chosenYears.join(','),
+          year: state.chosenYears.join(','),
         },
       })
         .then(r => {

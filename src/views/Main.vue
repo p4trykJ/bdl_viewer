@@ -17,7 +17,7 @@
               </v-icon>
             </v-btn>
           </template>
-          <v-card class="card--main mx-auto" :loading="cardLoading">
+          <v-card class="card--main mx-auto">
             <v-card-title>
               Ustawienia
               <v-spacer></v-spacer>
@@ -87,7 +87,7 @@
               menu
             </v-btn>
           </template>
-          <v-card class="card--legend mx-auto" :loading="cardLoading">
+          <v-card class="card--legend mx-auto">
             <v-card-title>
               Legenda
               <v-spacer></v-spacer>
@@ -110,7 +110,7 @@
                 </v-tab>
                 <v-tabs-items v-model="legendMenuTab">
                   <v-tab-item>
-                    legenda
+                    <Legend></Legend>
                   </v-tab-item>
                   <v-tab-item>
                     aa
@@ -157,6 +157,7 @@ import Categories from '@/components/Categories.vue';
 import Data from '@/components/Data.vue';
 // Legend components
 import Stats from '@/components/Stats.vue';
+import Legend from '../components/Legend.vue';
 
 export default {
   name: 'Main',
@@ -168,6 +169,7 @@ export default {
     Data,
     // Legend components
     Stats,
+    Legend,
   },
   data: () => ({
     // Main menu
@@ -208,6 +210,7 @@ export default {
 }
 .card--main {
   width: 500px;
+  max-width: 100vw;
 }
 .menu--main {
   top: 50px;

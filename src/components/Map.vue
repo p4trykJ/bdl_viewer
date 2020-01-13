@@ -20,13 +20,15 @@ import {
   // Circle
 } from 'ol/style';
 import {defaults as defaultControls} from 'ol/control';
-import ClassyBrew from 'classybrew';
 
 export default {
   name: 'Map',
-  data: () => ({
-    brew: new ClassyBrew(),
-  }),
+  data: () => ({}),
+  computed: {
+    colorBrew() {
+      return this.$store.getters.getColorBrew;
+    },
+  },
   methods: {
     createMap() {
       this.map = new Map({
@@ -50,16 +52,16 @@ export default {
             name: 'units',
             source: new VectorSource({
               url:
-                'https://api.mapbox.com/datasets/v1/p4trykj/ck122ks2h02po2jrori3gurg7/features?access_token=pk.eyJ1IjoicDR0cnlraiIsImEiOiJjazExeWNyN3cwankzM2JwNmNtOHgzNXg5In0.StjLw-qURyTLbAZKWxZl2g',
+                'https://api.mapbox.com/datasets/v1/p4trykj/ck5d02qdn00so2vqokg4i6h95/features?access_token=pk.eyJ1IjoicDR0cnlraiIsImEiOiJjazExeWNyN3cwankzM2JwNmNtOHgzNXg5In0.StjLw-qURyTLbAZKWxZl2g',
               format: new GeoJSON(),
             }),
             style: new Style({
               fill: new Fill({
-                color: 'rgba(0, 110, 83, 0.2)',
+                color: 'rgba(245, 245, 245, .1)',
               }),
               stroke: new Stroke({
                 color: '#000000',
-                width: 0.5,
+                width: 1,
               }),
             }),
           }),
@@ -80,18 +82,45 @@ export default {
         return dataArray;
       });
     },
+    setColorBrewProperty(method, value, dispatch = false) {
+      this.colorBrew[method](value);
+      if (dispatch) {
+        this.getLayerByName('units').changed();
+      }
+    },
+    getColorInRangeHandler(value) {
+      try {
+        return this.colorBrew.getColorInRange(value);
+      } catch {
+        return 'rgba(245, 245, 245, .1)';
+      }
+    },
     drawCartogram() {
       this.prepareData().then(() => {
-        this.brew.setSeries(this.$store.getters.getDataArray);
-        this.brew.setNumClasses(Number(this.$store.getters.getClassesAmount));
-        this.brew.setColorCode(this.$store.getters.getColorRamp);
-        this.brew.classify(this.$store.getters.getClassifyMethod);
+        this.setColorBrewProperty(
+          'setSeries',
+          this.$store.getters.getDataArray
+        );
+        this.setColorBrewProperty(
+          'setNumClasses',
+          Number(this.$store.getters.getClassesAmount)
+        );
+        // this.colorBrew.setColorCode(this.$store.getters.getColorRamp);
+        this.setColorBrewProperty(
+          'setColorCode',
+          this.$store.getters.getColorRamp
+        );
+        this.setColorBrewProperty(
+          'classify',
+          this.$store.getters.getClassifyMethod,
+          true
+        );
         this.getLayerByName('units').setStyle(feature => {
           const styles = [];
           styles.push(
             new Style({
               fill: new Fill({
-                color: this.brew.getColorInRange(feature.get('value')),
+                color: this.colorBrew.getColorInRange(feature.get('value')),
               }),
               stroke: new Stroke({
                 color: '#000000',
