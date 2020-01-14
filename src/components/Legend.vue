@@ -22,6 +22,9 @@
 </template>
 
 <script>
+function fixValue(value, precision) {
+  return !(value % 1) ? value : value.toFixed(precision);
+}
 export default {
   name: 'Legend',
   computed: {
@@ -34,7 +37,7 @@ export default {
         for (let i = 0; i < colors.length; i++) {
           colorsBreaks.push({
             color: colors[i],
-            range: `${breaks[i]} - ${breaks[i + 1]}`,
+            range: `${fixValue(breaks[i], 2)} - ${fixValue(breaks[i + 1], 2)}`,
           });
         }
         return colorsBreaks;

@@ -6,16 +6,18 @@
           <v-list-item v-for="item in statistics" :key="item.name">
             <v-list-item-content>
               <v-row>
-                <v-col>
+                <v-col cols="auto">
                   <v-list-item-title
                     class="statistics"
                     v-text="item.name"
+                    :title="item.name"
                   ></v-list-item-title>
                 </v-col>
                 <v-col>
                   <v-list-item-subtitle
-                    class="statistics"
+                    class="statistics statistics__value"
                     v-text="item.value"
+                    :title="item.value"
                   ></v-list-item-subtitle>
                 </v-col>
               </v-row>
@@ -69,5 +71,8 @@ export default {
 <style lang="scss">
 .statistics {
   font-size: 0.99rem !important;
+}
+.statistics__value {
+  text-align: end;
 }
 </style>
