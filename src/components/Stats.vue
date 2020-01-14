@@ -2,129 +2,47 @@
   <v-content>
     <v-row>
       <v-col>
-        <v-simple-table height="300px">
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Statystyka</th>
-                <th class="text-left">Wartość</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in desserts" :key="item.name">
-                <td>{{ item.name }}</td>
-                <td>{{ item.calories }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
+        <v-list dense v-if="statistics">
+          <v-list-item v-for="item in statistics" :key="item.name">
+            <v-list-item-content>
+              <v-list-item-title v-text="item.name"></v-list-item-title>
+              <v-list-item-subtitle v-text="item.value"></v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-subheader v-else>Wybierz dane</v-subheader>
       </v-col>
     </v-row>
   </v-content>
 </template>
 
 <script>
+/* eslint-disable no-underscore-dangle */
 export default {
-  name: 'DataTab',
-  components: {},
-  data: () => ({
-    desserts: [
-      {
-        name: 'Frozen Yogurt',
-        calories: 159,
-      },
-      {
-        name: 'Ice cream sandwich',
-        calories: 237,
-      },
-      {
-        name: 'Eclair',
-        calories: 262,
-      },
-      {
-        name: 'Cupcake',
-        calories: 305,
-      },
-      {
-        name: 'Gingerbread',
-        calories: 356,
-      },
-      {
-        name: 'Jelly bean',
-        calories: 375,
-      },
-      {
-        name: 'Lollipop',
-        calories: 392,
-      },
-      {
-        name: 'Honeycomb',
-        calories: 408,
-      },
-      {
-        name: 'Donut',
-        calories: 452,
-      },
-      {
-        name: 'KitKat',
-        calories: 518,
-      },
-    ],
-    // components v-models
-    chosenVariable: {
-      years: [],
-    },
-
-    rules: {
-      required: v => !!v || 'Pole wymagane',
-    },
-  }),
-  filters: {
-    variableTextFilter(text) {
-      if (text.length > 150) {
-        return text.slice(0, 150);
-      }
-      return text;
-    },
-  },
+  name: 'Statistics',
   computed: {
-    variables() {
-      const regex = /n[1-6]$/;
-      return this.$store.getters.getVariables.map(variable => {
-        variable.text = '';
-        Object.keys(variable).forEach(key => {
-          if (regex.test(key)) {
-            variable.text += ` ${variable[key]}`;
-          }
-        });
-        return variable;
-      });
-    },
-    variable: {
-      get() {
-        return this.$store.getters.getVariable;
-      },
-      set(value) {
-        this.$store.commit('setVariable', value);
-      },
-    },
-    chosenYears: {
-      get() {
-        return this.$store.getters.getChosenYears;
-      },
-      set(value) {
-        this.$store.commit('setChosenYears', value);
-      },
-    },
-  },
-  methods: {
-    getVariable() {
-      this.$store.dispatch('getVariable', this.variable.id).then(r => {
-        this.chosenVariable = r.data;
-      });
+    statistics() {
+      const colorBrew = this.$store.getters.getColorBrew;
+      const series = colorBrew.getSeries();
+      return [
+        {
+          name: 'Średnia',
+          value: colorBrew._mean(series),
+        },
+        {
+          name: 'Suma',
+          value: colorBrew._sum(series),
+        },
+        {
+          name: 'Wariancja',
+          value: colorBrew._variance(series),
+        },
+        {
+          name: 'Odchylenie standardowe',
+          value: colorBrew._stdDev(series),
+        },
+      ];
     },
   },
 };
 </script>
-
-<style></style>

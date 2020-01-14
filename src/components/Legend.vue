@@ -2,7 +2,7 @@
   <v-content>
     <v-row>
       <v-col>
-        <v-list dense>
+        <v-list dense v-if="colorsBreaks">
           <v-list-item v-for="item in colorsBreaks" :key="item.color">
             <v-list-item-icon>
               <div
@@ -15,6 +15,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
+        <v-subheader v-else>Wybierz dane</v-subheader>
       </v-col>
     </v-row>
   </v-content>
@@ -22,24 +23,24 @@
 
 <script>
 export default {
-  name: 'DataTab',
-  components: {},
-  data: () => ({}),
-  filters: {},
+  name: 'Legend',
   computed: {
     colorsBreaks() {
-      /* eslint-disable */
       const colorBrew = this.$store.getters.getColorBrew;
-      const breaks = colorBrew.getBreaks();
-      const colors = colorBrew.getColors();
-      const colorsBreaks = [];
-      for (let i = 0; i < colors.length; i++) {
-        colorsBreaks.push({
-          color: colors[i],
-          range: `${breaks[i]} - ${breaks[i + 1]}`,
-        });
+      try {
+        const breaks = colorBrew.getBreaks();
+        const colors = colorBrew.getColors();
+        const colorsBreaks = [];
+        for (let i = 0; i < colors.length; i++) {
+          colorsBreaks.push({
+            color: colors[i],
+            range: `${breaks[i]} - ${breaks[i + 1]}`,
+          });
+        }
+        return colorsBreaks;
+      } catch {
+        return false;
       }
-      return colorsBreaks;
     },
     variable: {
       get() {
