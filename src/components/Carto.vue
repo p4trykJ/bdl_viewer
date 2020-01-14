@@ -6,7 +6,12 @@
           v-model="classesAmount"
           outlined
           label="Liczba klas"
-          :rules="[rules.required, rules.mustBeNumber, rules.greaterThan2]"
+          :rules="[
+            rules.required,
+            rules.mustBeNumber,
+            rules.greaterThan2,
+            rules.lessThan9,
+          ]"
         />
       </v-col>
     </v-row>
@@ -17,6 +22,7 @@
           :items="classifyMethods"
           outlined
           label="Podział"
+          :rules="[rules.required]"
         />
       </v-col>
     </v-row>
@@ -27,6 +33,7 @@
           :items="colorRamps"
           outlined
           label="Paleta kolorów"
+          :rules="[rules.required]"
         />
       </v-col>
     </v-row>
@@ -96,6 +103,8 @@ export default {
       mustBeNumber: v => /\d/g.test(v) || 'Wartość parametru musi być liczbą',
       greaterThan2: v =>
         Number(v) >= 3 || 'Wartość parametru nie może być mniejsza niż 3',
+      lessThan9: v =>
+        Number(v) <= 9 || 'Wartość parametru nie może być większa niż 9',
     },
   }),
   filters: {

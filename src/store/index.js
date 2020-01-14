@@ -173,7 +173,8 @@ export default new Vuex.Store({
         params: {
           'aggregate-id': 1,
           'unit-level': 2,
-          year: state.chosenYears.join(','),
+          year: state.chosenYears,
+          // .join(','),
         },
       })
         .then(r => {

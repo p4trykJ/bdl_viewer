@@ -5,8 +5,20 @@
         <v-list dense v-if="statistics">
           <v-list-item v-for="item in statistics" :key="item.name">
             <v-list-item-content>
-              <v-list-item-title v-text="item.name"></v-list-item-title>
-              <v-list-item-subtitle v-text="item.value"></v-list-item-subtitle>
+              <v-row>
+                <v-col>
+                  <v-list-item-title
+                    class="statistics"
+                    v-text="item.name"
+                  ></v-list-item-title>
+                </v-col>
+                <v-col>
+                  <v-list-item-subtitle
+                    class="statistics"
+                    v-text="item.value"
+                  ></v-list-item-subtitle>
+                </v-col>
+              </v-row>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -18,6 +30,9 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
+function fixValue(value, precision) {
+  return !(value % 1) ? value : value.toFixed(precision);
+}
 export default {
   name: 'Statistics',
   computed: {
@@ -28,19 +43,19 @@ export default {
         return [
           {
             name: 'Średnia',
-            value: colorBrew._mean(series),
+            value: fixValue(colorBrew._mean(series), 2),
           },
           {
             name: 'Suma',
-            value: colorBrew._sum(series),
+            value: fixValue(colorBrew._sum(series), 2),
           },
           {
             name: 'Wariancja',
-            value: colorBrew._variance(series),
+            value: fixValue(colorBrew._variance(series), 2),
           },
           {
             name: 'Odchylenie standardowe',
-            value: colorBrew._stdDev(series),
+            value: fixValue(colorBrew._stdDev(series), 2),
           },
         ];
       } catch {
@@ -50,3 +65,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.statistics {
+  font-size: 0.99rem !important;
+}
+</style>

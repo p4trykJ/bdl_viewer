@@ -19,10 +19,12 @@
         <v-select
           v-model="chosenYears"
           :items="chosenVariable.years"
-          chips
+          :chips="false"
           outlined
           label="Lata"
-          multiple
+          :multiple="false"
+          @change="$emit('dataFilled')"
+          :rules="[rules.required]"
         />
       </v-col>
     </v-row>

@@ -47,7 +47,7 @@
                     </Categories>
                   </v-tab-item>
                   <v-tab-item>
-                    <Data></Data>
+                    <Data @dataFilled.once="mainMenuTab = 2"></Data>
                   </v-tab-item>
                   <v-tab-item>
                     <Carto></Carto>
@@ -60,7 +60,7 @@
               <!-- <v-btn icon>
                 <v-icon>mdi-cancel</v-icon>
               </v-btn> -->
-              <v-btn icon title="Akceptuj" @click="drawCartogram">
+              <v-btn icon title="Akceptuj" @click="accept">
                 <v-icon>mdi-check-outline</v-icon>
               </v-btn>
             </v-card-actions>
@@ -84,7 +84,9 @@
               @click="toggleMenu('legendMenu')"
               v-show="!legendMenuVisible"
             >
-              menu
+              <v-icon>
+                mdi-map-legend
+              </v-icon>
             </v-btn>
           </template>
           <v-card class="card--legend mx-auto">
@@ -102,9 +104,9 @@
                 <v-tab>
                   Legenda
                 </v-tab>
-                <v-tab>
+                <!-- <v-tab>
                   Dane
-                </v-tab>
+                </v-tab> -->
                 <v-tab>
                   Statystyki
                 </v-tab>
@@ -112,24 +114,15 @@
                   <v-tab-item>
                     <Legend></Legend>
                   </v-tab-item>
-                  <v-tab-item>
+                  <!-- <v-tab-item>
                     aa
-                  </v-tab-item>
+                  </v-tab-item> -->
                   <v-tab-item>
                     <Statistics></Statistics>
                   </v-tab-item>
                 </v-tabs-items>
               </v-tabs>
             </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <!-- <v-btn icon>
-                <v-icon>mdi-cancel</v-icon>
-              </v-btn> -->
-              <v-btn icon title="Akceptuj" @click="drawCartogram">
-                <v-icon>mdi-check-outline</v-icon>
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-menu>
       </v-col>
@@ -173,7 +166,7 @@ export default {
   },
   data: () => ({
     // Main menu
-    mainMenuVisible: false,
+    mainMenuVisible: true,
     mainMenuTab: 0,
 
     // Legend
@@ -192,7 +185,7 @@ export default {
     },
   },
   methods: {
-    drawCartogram() {
+    accept() {
       this.$root.$emit('drawCartogram');
     },
     toggleMenu(menu) {
@@ -220,7 +213,7 @@ export default {
   right: 0;
 }
 .menu--legend {
-  bottom: 300px;
+  bottom: 400px;
   right: 0;
 }
 </style>
