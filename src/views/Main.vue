@@ -116,7 +116,7 @@
                     aa
                   </v-tab-item>
                   <v-tab-item>
-                    <Stats></Stats>
+                    <Statistics></Statistics>
                   </v-tab-item>
                 </v-tabs-items>
               </v-tabs>
@@ -156,7 +156,7 @@ import Carto from '@/components/Carto.vue';
 import Categories from '@/components/Categories.vue';
 import Data from '@/components/Data.vue';
 // Legend components
-import Stats from '@/components/Stats.vue';
+import Statistics from '@/components/Statistics.vue';
 import Legend from '../components/Legend.vue';
 
 export default {
@@ -168,7 +168,7 @@ export default {
     Categories,
     Data,
     // Legend components
-    Stats,
+    Statistics,
     Legend,
   },
   data: () => ({
