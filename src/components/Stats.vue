@@ -23,25 +23,29 @@ export default {
   computed: {
     statistics() {
       const colorBrew = this.$store.getters.getColorBrew;
-      const series = colorBrew.getSeries();
-      return [
-        {
-          name: 'Średnia',
-          value: colorBrew._mean(series),
-        },
-        {
-          name: 'Suma',
-          value: colorBrew._sum(series),
-        },
-        {
-          name: 'Wariancja',
-          value: colorBrew._variance(series),
-        },
-        {
-          name: 'Odchylenie standardowe',
-          value: colorBrew._stdDev(series),
-        },
-      ];
+      try {
+        const series = colorBrew.getSeries();
+        return [
+          {
+            name: 'Średnia',
+            value: colorBrew._mean(series),
+          },
+          {
+            name: 'Suma',
+            value: colorBrew._sum(series),
+          },
+          {
+            name: 'Wariancja',
+            value: colorBrew._variance(series),
+          },
+          {
+            name: 'Odchylenie standardowe',
+            value: colorBrew._stdDev(series),
+          },
+        ];
+      } catch {
+        return false;
+      }
     },
   },
 };
