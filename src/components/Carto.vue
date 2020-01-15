@@ -8,7 +8,7 @@
           label="Liczba klas"
           :rules="[
             rules.required,
-            rules.mustBeNumber,
+            rules.number,
             rules.greaterThan2,
             rules.lessThan9,
           ]"
@@ -97,10 +97,9 @@ export default {
       'Pastel2',
       'Pastel1',
     ],
-
     rules: {
       required: v => !!v || 'Pole wymagane',
-      mustBeNumber: v => /\d/g.test(v) || 'Wartość parametru musi być liczbą',
+      number: v => /\d/g.test(v) || 'Wartość parametru musi być liczbą',
       greaterThan2: v =>
         Number(v) >= 3 || 'Wartość parametru nie może być mniejsza niż 3',
       lessThan9: v =>
@@ -150,5 +149,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

@@ -57,9 +57,6 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <!-- <v-btn icon>
-                <v-icon>mdi-cancel</v-icon>
-              </v-btn> -->
               <v-btn icon title="Akceptuj" @click="accept">
                 <v-icon>mdi-check-outline</v-icon>
               </v-btn>
@@ -104,9 +101,6 @@
                 <v-tab>
                   Legenda
                 </v-tab>
-                <!-- <v-tab>
-                  Dane
-                </v-tab> -->
                 <v-tab>
                   Statystyki
                 </v-tab>
@@ -114,9 +108,6 @@
                   <v-tab-item>
                     <Legend></Legend>
                   </v-tab-item>
-                  <!-- <v-tab-item>
-                    aa
-                  </v-tab-item> -->
                   <v-tab-item>
                     <Statistics></Statistics>
                   </v-tab-item>
