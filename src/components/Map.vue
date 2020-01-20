@@ -54,7 +54,7 @@ import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
-import {OSM, XYZ} from 'ol/source';
+import {XYZ} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import Overlay from 'ol/Overlay';
@@ -106,9 +106,6 @@ export default {
         overlays: [this.overlay],
         controls: defaultControls(),
         layers: [
-          new TileLayer({
-            source: new OSM(),
-          }),
           new TileLayer({
             source: new XYZ({
               url:

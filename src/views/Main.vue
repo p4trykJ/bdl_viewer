@@ -131,18 +131,6 @@
         </v-menu>
       </v-col>
     </v-row>
-    <!-- <v-row class="menu menu--layers">
-      <v-col cols="12" sm="12">
-        <v-menu offset-y>
-          <template v-slot:activator="{on}">
-            <v-btn color="primary" dark>
-              menu
-            </v-btn>
-          </template>
-          aaa
-        </v-menu>
-      </v-col>
-    </v-row> -->
   </v-container>
 </template>
 
@@ -237,12 +225,8 @@ export default {
 .menu--main {
   top: 50px;
 }
-.menu--layers {
-  top: 0;
-  right: 0;
-}
 .menu--legend {
-  bottom: 400px;
+  bottom: 500px;
   right: 0;
 }
 .card--legend {
