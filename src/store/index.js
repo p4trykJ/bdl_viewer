@@ -51,7 +51,6 @@ export default new Vuex.Store({
     colorRamp: undefined,
     classifyMethod: undefined,
     classesAmount: undefined,
-    variableData: {},
     colorBrew: new classyBrew(),
     currentYear: undefined,
     timeout: 5,
@@ -77,9 +76,6 @@ export default new Vuex.Store({
     },
     getClassesAmount(state) {
       return state.classesAmount;
-    },
-    getVariableData(state) {
-      return state.variableData;
     },
     getColorBrew(state) {
       return state.colorBrew;
@@ -112,9 +108,6 @@ export default new Vuex.Store({
     },
     setClassesAmount(state, value) {
       state.classesAmount = value;
-    },
-    setVariableData(state, value) {
-      state.variableData = value;
     },
     setCurrentYear(state, value) {
       state.currentYear = value;

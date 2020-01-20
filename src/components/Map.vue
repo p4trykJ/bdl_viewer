@@ -26,17 +26,18 @@ import {defaults as defaultControls} from 'ol/control';
 export default {
   name: 'Map',
   data: () => ({
-    indexStartFrom: 0,
+    indexToStartFrom: 0,
     timeoutID: undefined,
     currentYearIndex: undefined,
+    variableData: {},
   }),
   computed: {
     colorBrew() {
       return this.$store.getters.getColorBrew;
     },
-    variableData() {
-      return this.$store.getters.getVariableData;
-    },
+    // variableData() {
+    //   return this.$store.getters.getVariableData;
+    // },
   },
   methods: {
     createMap() {
@@ -101,28 +102,30 @@ export default {
     prepareDataset() {
       return this.$store.dispatch('getData').then(r => {
         const variableData = {};
-        // create object property for every single year
+        // create variableData property for every single year
         r.data.results[0].values.forEach(val => {
           variableData[`value_${val.year}`] = [];
         });
+        // fill array and add feature property for every single year
         r.data.results.forEach(res => {
           const feature = this.getLayerFeatures('units').find(
             unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
           );
-          // fill array and add feature property for every single year
           res.values.forEach(obj => {
             const {year, val} = obj;
-            variableData[`value_${year}`].push(val);
-            feature.set(`value_${year}`, val);
+            const propertyName = `value_${year}`;
+            variableData[propertyName].push(val);
+            feature.set(propertyName, val);
           });
         });
-        this.$store.commit('setVariableData', variableData);
+        this.variableData = variableData;
         this.drawCartogram(0, true);
       });
     },
-    drawCartogram(indexStartFrom, auto = true) {
+    drawCartogram(indexToStartFrom, auto = true) {
+      clearTimeout(this.timeoutID); // to be sure that there is no draw function running in the backgroud
       const variableDataKeys = Object.keys(this.variableData);
-      this.currentYearIndex = indexStartFrom;
+      this.currentYearIndex = indexToStartFrom;
       const draw = () => {
         if (this.currentYearIndex < variableDataKeys.length) {
           const key = variableDataKeys[this.currentYearIndex];

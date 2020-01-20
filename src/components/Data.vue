@@ -23,19 +23,8 @@
           outlined
           label="Lata"
           multiple
-          @blur="chosenYears.length < 1 ? $emit('dataFilled') : null"
+          @blur="$emit('dataFilled')"
           :rules="[rules.required]"
-        />
-      </v-col>
-    </v-row>
-    <v-row v-if="chosenYears.length > 1" class="pb-0">
-      <v-col class="pb-0">
-        <v-text-field
-          v-model="timeout"
-          outlined
-          label="Interwał slajdów (s)"
-          :rules="[rules.required]"
-          @change="$emit('dataFilled')"
         />
       </v-col>
     </v-row>
@@ -91,14 +80,6 @@ export default {
       },
       set(value) {
         this.$store.commit('setChosenYears', value);
-      },
-    },
-    timeout: {
-      get() {
-        return this.$store.getters.getTimeout;
-      },
-      set(value) {
-        this.$store.commit('setTimeout', value);
       },
     },
   },

@@ -38,6 +38,16 @@
         />
       </v-col>
     </v-row>
+    <v-row v-if="chosenYears.length > 1" class="pb-0">
+      <v-col class="pb-0">
+        <v-text-field
+          v-model="timeout"
+          outlined
+          label="Interwał slajdów (s)"
+          :rules="[rules.required]"
+        />
+      </v-col>
+    </v-row>
   </v-content>
 </template>
 
@@ -138,6 +148,17 @@ export default {
       },
       set(value) {
         this.$store.commit('setClassesAmount', value);
+      },
+    },
+    chosenYears() {
+      return this.$store.getters.getChosenYears;
+    },
+    timeout: {
+      get() {
+        return this.$store.getters.getTimeout;
+      },
+      set(value) {
+        this.$store.commit('setTimeout', value);
       },
     },
   },

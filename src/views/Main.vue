@@ -40,10 +40,7 @@
                 </v-tab>
                 <v-tabs-items v-model="mainMenuTab">
                   <v-tab-item>
-                    <Categories
-                      @requestCompleted.once="cardLoading = false"
-                      @categoriesFilled.once="onCategoriesFilled"
-                    >
+                    <Categories @categoriesFilled.once="onCategoriesFilled">
                     </Categories>
                   </v-tab-item>
                   <v-tab-item>
@@ -183,7 +180,6 @@ export default {
     // Legend
     legendMenuVisible: false,
     legendMenuTab: 0,
-    cardLoading: true,
     // Form filled variables
     categoryFilled: false,
     cartoFilled: false,

@@ -71,9 +71,6 @@ export default {
     getSubjects(level, parentID = null) {
       this.$store.dispatch('getSubjects', {'parent-id': parentID}).then(r => {
         this[level] = r.data.results;
-        setTimeout(() => {
-          this.$emit('requestCompleted');
-        }, 1000);
       });
     },
     onFormFilled() {
