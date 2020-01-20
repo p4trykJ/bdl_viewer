@@ -112,7 +112,7 @@
             <v-card-text>
               <v-tabs grow centered center-active v-model="legendMenuTab">
                 <v-tab>
-                  Legenda
+                  Symbolizacja
                 </v-tab>
                 <v-tab>
                   Statystyki
@@ -247,7 +247,7 @@ export default {
 }
 .card--legend {
   // min-width: 330px;
-  width: 300px;
+  width: 350px;
   max-width: 100vw;
 }
 .presentation__buttons {
