@@ -153,13 +153,15 @@ export default {
             return styles;
           });
           this.getLayerByName('units').changed();
-          // eslint-disable-next-line no-plusplus
           this.currentYearIndex++;
           if (auto) {
+            this.$store.commit('setIsPresentationOnAuto', true);
             this.timeoutID = setTimeout(
               draw,
               Number(this.$store.getters.getTimeout * 1000)
             );
+          } else {
+            this.$store.commit('setIsPresentationOnAuto', false);
           }
         }
       };
@@ -167,6 +169,7 @@ export default {
     },
     stopPresentation() {
       clearTimeout(this.timeoutID);
+      this.$store.commit('setIsPresentationOnAuto', false);
     },
     startPresentation() {
       this.drawCartogram(--this.currentYearIndex, true);
@@ -178,7 +181,7 @@ export default {
       } else {
         this.$root.$emit(
           'showSnackbar',
-          'Przejrzano wszystkie dostepne lata',
+          'Wyświetlono dane dla wszystkich wybranych lat',
           'error'
         );
       }
@@ -186,12 +189,12 @@ export default {
     previousSlide() {
       if (this.currentYearIndex > 1) {
         clearTimeout(this.timeoutID);
-        this.currentYearIndex = this.currentYearIndex - 2;
+        this.currentYearIndex -= 2;
         this.drawCartogram(this.currentYearIndex, false);
       } else {
         this.$root.$emit(
           'showSnackbar',
-          'Przejrzano wszystkie dostepne lata',
+          'Wyświetlono dane dla wszystkich wybranych lat',
           'error'
         );
       }

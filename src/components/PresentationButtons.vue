@@ -1,11 +1,6 @@
 <template>
   <v-row>
     <v-col>
-      <v-btn>
-        <v-icon @click="startPresentation">
-          mdi-play
-        </v-icon>
-      </v-btn>
       <v-btn @click="previousSlide">
         <v-icon>
           mdi-skip-previous
@@ -16,9 +11,14 @@
           mdi-skip-next
         </v-icon>
       </v-btn>
-      <v-btn @click="stopPresentation">
+      <v-btn @click="stopPresentation" v-show="isPresentationOnAuto">
         <v-icon>
           mdi-play-pause
+        </v-icon>
+      </v-btn>
+      <v-btn v-show="!isPresentationOnAuto" @click="startPresentation">
+        <v-icon>
+          mdi-play
         </v-icon>
       </v-btn>
     </v-col>
@@ -28,9 +28,12 @@
 <script>
 export default {
   name: 'PresentationButtons',
+  data: () => ({
+    isPresentationOn: false,
+  }),
   computed: {
-    timeoutID() {
-      return this.$store.getters.getTimeoutID;
+    isPresentationOnAuto() {
+      return this.$store.getters.getIsPresentationOnAuto;
     },
   },
   methods: {
@@ -46,6 +49,9 @@ export default {
     stopPresentation() {
       this.$root.$emit('stopPresentation');
     },
+  },
+  mounted() {
+    this.$root.$on('isAutoPresentation', this.setPresentation);
   },
 };
 </script>

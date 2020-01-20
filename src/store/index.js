@@ -54,6 +54,7 @@ export default new Vuex.Store({
     colorBrew: new classyBrew(),
     currentYear: undefined,
     timeout: 5,
+    isPresentationOnAuto: false,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -86,6 +87,9 @@ export default new Vuex.Store({
     getTimeout(state) {
       return state.timeout;
     },
+    getIsPresentationOnAuto(state) {
+      return state.isPresentationOnAuto;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
@@ -114,6 +118,9 @@ export default new Vuex.Store({
     },
     setTimeout(state, value) {
       state.timeout = value;
+    },
+    setIsPresentationOnAuto(state, value) {
+      state.isPresentationOnAuto = value;
     },
   },
   actions: {
