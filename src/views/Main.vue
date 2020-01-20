@@ -162,7 +162,7 @@ export default {
   },
   data: () => ({
     // Main menu
-    mainMenuVisible: true,
+    mainMenuVisible: false,
     mainMenuTab: 0,
 
     // Legend

@@ -18,6 +18,33 @@
           </v-btn>
         </v-col>
       </v-row>
+      <v-row no-gutters class="px-4">
+        <v-col cols="12">
+          <v-subheader class="justify-center headline">
+            BDL Browser
+          </v-subheader>
+        </v-col>
+        <v-col cols="12">
+          <p class="text-justify subtitle-2">
+            BDL Browser jest aplikacją oferującą możliwość szybkiej i łatwej
+            prezentacji danych pochodzących z Banku Danych Lokalnych,
+            udostępnianego przez Główny Urząd Statystyczny, w postaci
+            kartogramów.
+          </p>
+        </v-col>
+        <v-col cols="12">
+          <p class="text-justify subtitle-2">
+            W celu wykonania kartogramu należy wypełnić wszystkie wymagane pola,
+            a następnie zatwierdzić przyciskiem ✓.
+          </p>
+        </v-col>
+        <v-col cols="12">
+          <p class="text-justify subtitle-2">
+            Wybierając więcej niż jeden rok aplikacja pozwala na wykonanie
+            pokazu slajdów.
+          </p>
+        </v-col>
+      </v-row>
     </v-navigation-drawer>
     <v-content>
       <v-container fluid fill-height pa-0>
