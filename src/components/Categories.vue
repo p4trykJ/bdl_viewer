@@ -83,7 +83,7 @@ export default {
         })
         .then(r => {
           this.$store.commit('setVariables', r.data.results);
-          this.$emit('formFilled', r.data.results);
+          this.$emit('categoriesFilled', r.data.results);
         });
     },
   },

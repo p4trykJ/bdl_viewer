@@ -98,7 +98,7 @@ export default {
         .getSource()
         .getFeatures();
     },
-    prepareData() {
+    prepareDataset() {
       return this.$store.dispatch('getData').then(r => {
         const variableData = {};
         // create object property for every single year
@@ -196,7 +196,7 @@ export default {
   },
   mounted() {
     this.createMap();
-    this.$root.$on('drawCartogram', this.prepareData);
+    this.$root.$on('prepareDataset', this.prepareDataset);
     this.$root.$on('stopPresentation', this.stopPresentation);
     this.$root.$on('startPresentation', this.startPresentation);
     this.$root.$on('nextSlide', this.nextSlide);

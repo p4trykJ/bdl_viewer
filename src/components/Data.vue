@@ -28,8 +28,8 @@
         />
       </v-col>
     </v-row>
-    <v-row v-if="chosenYears.length > 1">
-      <v-col>
+    <v-row v-if="chosenYears.length > 1" class="pb-0">
+      <v-col class="pb-0">
         <v-text-field
           v-model="timeout"
           outlined

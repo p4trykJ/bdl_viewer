@@ -42,30 +42,44 @@
                   <v-tab-item>
                     <Categories
                       @requestCompleted.once="cardLoading = false"
-                      @formFilled.once="mainMenuTab = 1"
+                      @categoriesFilled.once="onCategoriesFilled"
                     >
                     </Categories>
                   </v-tab-item>
                   <v-tab-item>
-                    <Data @dataFilled.once="mainMenuTab = 2"></Data>
+                    <Data @dataFilled.once="onDataFilled"></Data>
                   </v-tab-item>
                   <v-tab-item>
-                    <Carto></Carto>
+                    <Carto @cartoFilled.once="onCartoFilled"></Carto>
                   </v-tab-item>
                 </v-tabs-items>
               </v-tabs>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn icon title="Akceptuj" @click="accept">
-                <v-icon>mdi-check-outline</v-icon>
-              </v-btn>
+              <v-row class="justify-end">
+                <v-col
+                  cols="auto"
+                  :title="
+                    isFormFilled
+                      ? `Akceptuj`
+                      : `Aby wyświetlić kartogram wypełnij pola we wszystkich zakładkach`
+                  "
+                >
+                  <v-btn :disabled="!isFormFilled" icon @click="accept">
+                    <v-icon>mdi-check-outline</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card-actions>
           </v-card>
         </v-menu>
       </v-col>
     </v-row>
-    <PresentationButtons class="menu presentation__buttons" />
+    <PresentationButtons
+      v-show="hasCoupleYears"
+      class="menu presentation__buttons"
+    />
 
     <v-row class="menu menu--legend">
       <v-col cols="12" sm="12">
@@ -170,6 +184,10 @@ export default {
     legendMenuVisible: false,
     legendMenuTab: 0,
     cardLoading: true,
+    // Form filled variables
+    categoryFilled: false,
+    cartoFilled: false,
+    dataFilled: false,
   }),
   computed: {
     drawerVisibility: {
@@ -180,13 +198,31 @@ export default {
         this.$store.commit('setDrawerVisibility', value);
       },
     },
+    hasCoupleYears() {
+      return this.$store.getters.getChosenYears.length > 1;
+    },
+    isFormFilled() {
+      return this.cartoFilled && this.dataFilled && this.categoryFilled;
+    },
   },
   methods: {
     accept() {
-      this.$root.$emit('drawCartogram');
+      this.$root.$emit('prepareDataset');
+      this.legendMenuVisible = true;
     },
     toggleMenu(menu) {
       this[`${menu}Visible`] = !this[`${menu}Visible`];
+    },
+    onCategoriesFilled() {
+      this.categoryFilled = true;
+      this.mainMenuTab = 1;
+    },
+    onDataFilled() {
+      this.dataFilled = true;
+      this.mainMenuTab = 2;
+    },
+    onCartoFilled() {
+      this.cartoFilled = true;
     },
   },
   mounted() {},

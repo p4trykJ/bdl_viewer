@@ -34,6 +34,7 @@
           outlined
           label="Paleta kolorów"
           :rules="[rules.required]"
+          @change="$emit('cartoFilled')"
         />
       </v-col>
     </v-row>
