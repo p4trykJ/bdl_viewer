@@ -23,8 +23,19 @@
           outlined
           label="Lata"
           multiple
-          @blur="$emit('dataFilled')"
+          @blur="chosenYears.length < 1 ? $emit('dataFilled') : null"
           :rules="[rules.required]"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="chosenYears.length > 1">
+      <v-col>
+        <v-text-field
+          v-model="timeout"
+          outlined
+          label="Interwał slajdów (s)"
+          :rules="[rules.required]"
+          @change="$emit('dataFilled')"
         />
       </v-col>
     </v-row>
@@ -40,6 +51,7 @@ export default {
     chosenVariable: {
       years: [],
     },
+
     rules: {
       required: v => !!v || 'Pole wymagane',
     },
@@ -79,6 +91,14 @@ export default {
       },
       set(value) {
         this.$store.commit('setChosenYears', value);
+      },
+    },
+    timeout: {
+      get() {
+        return this.$store.getters.getTimeout;
+      },
+      set(value) {
+        this.$store.commit('setTimeout', value);
       },
     },
   },

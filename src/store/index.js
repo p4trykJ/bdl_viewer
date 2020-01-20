@@ -54,7 +54,7 @@ export default new Vuex.Store({
     variableData: {},
     colorBrew: new classyBrew(),
     currentYear: undefined,
-    timeout: 5000,
+    timeout: 5,
   },
   getters: {
     getDrawerVisibility(state) {

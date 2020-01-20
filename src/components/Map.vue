@@ -118,8 +118,6 @@ export default {
         });
         this.$store.commit('setVariableData', variableData);
         this.drawCartogram(0, true);
-
-        // return variableData;
       });
     },
     drawCartogram(indexStartFrom, auto = true) {
@@ -155,7 +153,10 @@ export default {
           // eslint-disable-next-line no-plusplus
           this.currentYearIndex++;
           if (auto) {
-            this.timeoutID = setTimeout(draw, this.$store.getters.getTimeout);
+            this.timeoutID = setTimeout(
+              draw,
+              Number(this.$store.getters.getTimeout * 1000)
+            );
           }
         }
       };
