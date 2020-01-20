@@ -209,6 +209,7 @@ export default {
 }
 .card--legend {
   // min-width: 330px;
+  width: 300px;
   max-width: 100vw;
 }
 </style>

@@ -3,6 +3,12 @@
     <v-row>
       <v-col>
         <v-list dense v-if="colorsBreaks">
+          <v-subheader style="height:auto;" class="py-1">
+            <span style="text-transform: capitalize">
+              <span>{{ variable.text }}</span> w roku
+              <span>{{ currentYear }}</span>
+            </span>
+          </v-subheader>
           <v-list-item v-for="item in colorsBreaks" :key="item.color">
             <v-list-item-icon>
               <div
@@ -15,7 +21,9 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-subheader v-else>Wybierz dane</v-subheader>
+        <v-subheader v-else>
+          W celu wyświetlenia legendy wybierz zestaw danych
+        </v-subheader>
       </v-col>
     </v-row>
   </v-content>
@@ -45,28 +53,11 @@ export default {
         return false;
       }
     },
-    variable: {
-      get() {
-        return this.$store.getters.getVariable;
-      },
-      set(value) {
-        this.$store.commit('setVariable', value);
-      },
+    variable() {
+      return this.$store.getters.getVariable;
     },
-    chosenYears: {
-      get() {
-        return this.$store.getters.getChosenYears;
-      },
-      set(value) {
-        this.$store.commit('setChosenYears', value);
-      },
-    },
-  },
-  methods: {
-    getVariable() {
-      this.$store.dispatch('getVariable', this.variable.id).then(r => {
-        this.chosenVariable = r.data;
-      });
+    currentYear() {
+      return this.$store.getters.getCurrentYear;
     },
   },
 };

@@ -51,8 +51,9 @@ export default new Vuex.Store({
     colorRamp: undefined,
     classifyMethod: undefined,
     classesAmount: undefined,
-    dataArray: [],
+    variableData: {},
     colorBrew: new classyBrew(),
+    currentYear: undefined,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -76,11 +77,14 @@ export default new Vuex.Store({
     getClassesAmount(state) {
       return state.classesAmount;
     },
-    getDataArray(state) {
-      return state.dataArray;
+    getVariableData(state) {
+      return state.variableData;
     },
     getColorBrew(state) {
       return state.colorBrew;
+    },
+    getCurrentYear(state) {
+      return state.currentYear;
     },
   },
   mutations: {
@@ -105,8 +109,11 @@ export default new Vuex.Store({
     setClassesAmount(state, value) {
       state.classesAmount = value;
     },
-    setDataArray(state, value) {
-      state.dataArray = value;
+    setVariableData(state, value) {
+      state.variableData = value;
+    },
+    setCurrentYear(state, value) {
+      state.currentYear = value;
     },
   },
   actions: {
@@ -142,22 +149,24 @@ export default new Vuex.Store({
           return e;
         });
     },
-    getData({state, commit}) {
+    getData({state}) {
+      let url = `data/by-variable/${state.variable.id}`;
+      if (state.chosenYears.length > 0) {
+        url += '?';
+        state.chosenYears.forEach(year => {
+          url += `year=${year}&`;
+        });
+        url = url.slice(0, -1);
+      }
       return axios({
         method: 'get',
-        url: `data/by-variable/${state.variable.id}`,
+        url: url,
         params: {
           'aggregate-id': 1,
           'unit-level': 2,
-          year: state.chosenYears,
-          // .join(','),
         },
       })
         .then(r => {
-          commit(
-            'setDataArray',
-            r.data.results.map(r => r.values[0].val)
-          );
           return r;
         })
         .catch(e => {

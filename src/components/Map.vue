@@ -23,7 +23,10 @@ import {defaults as defaultControls} from 'ol/control';
 
 export default {
   name: 'Map',
-  data: () => ({}),
+  data: () => ({
+    currentDataID: 0,
+    intervalID: undefined,
+  }),
   computed: {
     colorBrew() {
       return this.$store.getters.getColorBrew;
@@ -69,68 +72,12 @@ export default {
       });
       window.map = this.map;
     },
-    prepareData() {
-      return this.$store.dispatch('getData').then(r => {
-        const dataArray = [];
-        r.data.results.forEach(res => {
-          const value = res.values[0].val;
-          const feature = this.getLayerFeatures('units').find(
-            unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
-          );
-          feature.set('value', value);
-        });
-        return dataArray;
-      });
-    },
-    setColorBrewProperty(method, value, dispatch = false) {
-      this.colorBrew[method](value);
-      if (dispatch) {
-        this.getLayerByName('units').changed();
-      }
-    },
     getColorInRangeHandler(value) {
       try {
         return this.colorBrew.getColorInRange(value);
       } catch {
         return 'rgba(245, 245, 245, .1)';
       }
-    },
-    drawCartogram() {
-      this.prepareData().then(() => {
-        this.setColorBrewProperty(
-          'setSeries',
-          this.$store.getters.getDataArray
-        );
-        this.setColorBrewProperty(
-          'setNumClasses',
-          Number(this.$store.getters.getClassesAmount)
-        );
-        // this.colorBrew.setColorCode(this.$store.getters.getColorRamp);
-        this.setColorBrewProperty(
-          'setColorCode',
-          this.$store.getters.getColorRamp
-        );
-        this.setColorBrewProperty(
-          'classify',
-          this.$store.getters.getClassifyMethod,
-          true
-        );
-        this.getLayerByName('units').setStyle(feature => {
-          const styles = [];
-          styles.push(
-            new Style({
-              fill: new Fill({
-                color: this.colorBrew.getColorInRange(feature.get('value')),
-              }),
-              stroke: new Stroke({
-                color: '#000000',
-                width: 1,
-              }),
-            })
-          );
-          return styles;
-        });
-      });
     },
     getLayerByName(name) {
       return this.map
@@ -144,6 +91,79 @@ export default {
       return this.getLayerByName(name)
         .getSource()
         .getFeatures();
+    },
+    prepareData() {
+      return this.$store.dispatch('getData').then(r => {
+        const variableData = {};
+        r.data.results[0].values.forEach(val => {
+          variableData[`value_${val.year}`] = [];
+        });
+        r.data.results.forEach(res => {
+          const feature = this.getLayerFeatures('units').find(
+            unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
+          );
+          res.values.forEach(obj => {
+            const {year, val} = obj;
+            variableData[`value_${year}`].push(val);
+            feature.set(`value_${year}`, val);
+          });
+        });
+        this.$store.commit('setVariableData', variableData);
+        return variableData;
+      });
+    },
+    drawCartogram() {
+      this.prepareData().then(variableData => {
+        this.currentDataID = 0;
+        const variableDataKeys = Object.keys(variableData);
+        const draw = () => {
+          if (this.currentDataID < variableDataKeys.length) {
+            const key = variableDataKeys[this.currentDataID];
+            this.$store.commit('setCurrentYear', key.split('_')[1]);
+            const data = variableData[key];
+            this.setColorBrewProperty('setSeries', data);
+            this.setColorBrewProperty(
+              'setNumClasses',
+              Number(this.$store.getters.getClassesAmount)
+            );
+            this.setColorBrewProperty(
+              'setColorCode',
+              this.$store.getters.getColorRamp
+            );
+            this.setColorBrewProperty(
+              'classify',
+              this.$store.getters.getClassifyMethod,
+              true
+            );
+            this.getLayerByName('units').setStyle(feature => {
+              const styles = [];
+              styles.push(
+                new Style({
+                  fill: new Fill({
+                    color: this.colorBrew.getColorInRange(feature.get(key)),
+                  }),
+                  stroke: new Stroke({
+                    color: '#000000',
+                    width: 1,
+                  }),
+                })
+              );
+              return styles;
+            });
+            // eslint-disable-next-line no-plusplus
+            this.currentDataID++;
+            setTimeout(draw, 5000);
+          }
+        };
+        draw();
+      });
+    },
+
+    setColorBrewProperty(method, value, dispatch = false) {
+      this.colorBrew[method](value);
+      if (dispatch) {
+        this.getLayerByName('units').changed();
+      }
     },
   },
   mounted() {

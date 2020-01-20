@@ -24,7 +24,9 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-subheader v-else>Wybierz dane</v-subheader>
+        <v-subheader v-else>
+          W celu wyświetlenia statystyk wybierz zestaw danych
+        </v-subheader>
       </v-col>
     </v-row>
   </v-content>
@@ -70,7 +72,7 @@ export default {
 
 <style lang="scss">
 .statistics {
-  font-size: 0.99rem !important;
+  font-size: 0.9rem !important;
 }
 .statistics__value {
   text-align: end;

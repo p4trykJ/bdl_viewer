@@ -19,11 +19,11 @@
         <v-select
           v-model="chosenYears"
           :items="chosenVariable.years"
-          :chips="false"
+          chips
           outlined
           label="Lata"
-          :multiple="false"
-          @change="$emit('dataFilled')"
+          multiple
+          @blur="$emit('dataFilled')"
           :rules="[rules.required]"
         />
       </v-col>
@@ -40,7 +40,6 @@ export default {
     chosenVariable: {
       years: [],
     },
-
     rules: {
       required: v => !!v || 'Pole wymagane',
     },
