@@ -4,10 +4,13 @@
       <v-col>
         <v-list dense v-if="colorsBreaks">
           <v-subheader style="height:auto;" class="py-1">
-            <span style="text-transform: capitalize">
+            <div style="text-transform: capitalize">
               <span>{{ variable.text }}</span> w roku
-              <span>{{ currentYear }}</span>
-            </span>
+              <span
+                >{{ currentYear }}
+                <div>Jednostka: {{ variable.measureUnitName }}</div>
+              </span>
+            </div>
           </v-subheader>
           <v-list-item v-for="item in colorsBreaks" :key="item.color">
             <v-list-item-icon>

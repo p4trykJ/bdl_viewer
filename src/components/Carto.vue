@@ -5,7 +5,7 @@
         <v-text-field
           v-model="classesAmount"
           outlined
-          label="Liczba klas"
+          label="Liczba przedziałów"
           :rules="[
             rules.required,
             rules.number,
