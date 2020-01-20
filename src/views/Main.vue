@@ -65,6 +65,8 @@
         </v-menu>
       </v-col>
     </v-row>
+    <PresentationButtons class="menu presentation__buttons" />
+
     <v-row class="menu menu--legend">
       <v-col cols="12" sm="12">
         <v-menu
@@ -142,6 +144,8 @@ import Data from '@/components/Data.vue';
 // Legend components
 import Statistics from '@/components/Statistics.vue';
 import Legend from '../components/Legend.vue';
+// Other components
+import PresentationButtons from '../components/PresentationButtons.vue';
 
 export default {
   name: 'Main',
@@ -154,6 +158,8 @@ export default {
     // Legend components
     Statistics,
     Legend,
+    // Other components
+    PresentationButtons,
   },
   data: () => ({
     // Main menu
@@ -211,5 +217,12 @@ export default {
   // min-width: 330px;
   width: 300px;
   max-width: 100vw;
+}
+.presentation__buttons {
+  top: 10px;
+  right: 50px;
+  .presentation__list {
+    list-style: none;
+  }
 }
 </style>

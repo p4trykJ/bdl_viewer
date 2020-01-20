@@ -5,6 +5,8 @@
 </template>
 
 <script>
+/* eslint-disable no-plusplus */
+
 import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -24,12 +26,16 @@ import {defaults as defaultControls} from 'ol/control';
 export default {
   name: 'Map',
   data: () => ({
-    currentDataID: 0,
-    intervalID: undefined,
+    indexStartFrom: 0,
+    timeoutID: undefined,
+    currentYearIndex: undefined,
   }),
   computed: {
     colorBrew() {
       return this.$store.getters.getColorBrew;
+    },
+    variableData() {
+      return this.$store.getters.getVariableData;
     },
   },
   methods: {
@@ -95,6 +101,7 @@ export default {
     prepareData() {
       return this.$store.dispatch('getData').then(r => {
         const variableData = {};
+        // create object property for every single year
         r.data.results[0].values.forEach(val => {
           variableData[`value_${val.year}`] = [];
         });
@@ -102,6 +109,7 @@ export default {
           const feature = this.getLayerFeatures('units').find(
             unit => unit.get('JPT_NAZWA_') === res.name.toLowerCase()
           );
+          // fill array and add feature property for every single year
           res.values.forEach(obj => {
             const {year, val} = obj;
             variableData[`value_${year}`].push(val);
@@ -109,66 +117,89 @@ export default {
           });
         });
         this.$store.commit('setVariableData', variableData);
-        return variableData;
-      });
-    },
-    drawCartogram() {
-      this.prepareData().then(variableData => {
-        this.currentDataID = 0;
-        const variableDataKeys = Object.keys(variableData);
-        const draw = () => {
-          if (this.currentDataID < variableDataKeys.length) {
-            const key = variableDataKeys[this.currentDataID];
-            this.$store.commit('setCurrentYear', key.split('_')[1]);
-            const data = variableData[key];
-            this.setColorBrewProperty('setSeries', data);
-            this.setColorBrewProperty(
-              'setNumClasses',
-              Number(this.$store.getters.getClassesAmount)
-            );
-            this.setColorBrewProperty(
-              'setColorCode',
-              this.$store.getters.getColorRamp
-            );
-            this.setColorBrewProperty(
-              'classify',
-              this.$store.getters.getClassifyMethod,
-              true
-            );
-            this.getLayerByName('units').setStyle(feature => {
-              const styles = [];
-              styles.push(
-                new Style({
-                  fill: new Fill({
-                    color: this.colorBrew.getColorInRange(feature.get(key)),
-                  }),
-                  stroke: new Stroke({
-                    color: '#000000',
-                    width: 1,
-                  }),
-                })
-              );
-              return styles;
-            });
-            // eslint-disable-next-line no-plusplus
-            this.currentDataID++;
-            setTimeout(draw, 5000);
-          }
-        };
-        draw();
-      });
-    },
+        this.drawCartogram(0, true);
 
-    setColorBrewProperty(method, value, dispatch = false) {
-      this.colorBrew[method](value);
-      if (dispatch) {
-        this.getLayerByName('units').changed();
+        // return variableData;
+      });
+    },
+    drawCartogram(indexStartFrom, auto = true) {
+      const variableDataKeys = Object.keys(this.variableData);
+      this.currentYearIndex = indexStartFrom;
+      const draw = () => {
+        if (this.currentYearIndex < variableDataKeys.length) {
+          const key = variableDataKeys[this.currentYearIndex];
+          this.$store.commit('setCurrentYear', key.split('_')[1]);
+          const data = this.variableData[key];
+          this.colorBrew.setSeries(data);
+          this.colorBrew.setNumClasses(
+            Number(this.$store.getters.getClassesAmount)
+          );
+          this.colorBrew.setColorCode(this.$store.getters.getColorRamp);
+          this.colorBrew.classify(this.$store.getters.getClassifyMethod);
+          this.getLayerByName('units').setStyle(feature => {
+            const styles = [];
+            styles.push(
+              new Style({
+                fill: new Fill({
+                  color: this.colorBrew.getColorInRange(feature.get(key)),
+                }),
+                stroke: new Stroke({
+                  color: '#000000',
+                  width: 1,
+                }),
+              })
+            );
+            return styles;
+          });
+          this.getLayerByName('units').changed();
+          // eslint-disable-next-line no-plusplus
+          this.currentYearIndex++;
+          if (auto) {
+            this.timeoutID = setTimeout(draw, this.$store.getters.getTimeout);
+          }
+        }
+      };
+      draw();
+    },
+    stopPresentation() {
+      clearTimeout(this.timeoutID);
+    },
+    startPresentation() {
+      this.drawCartogram(--this.currentYearIndex, true);
+    },
+    nextSlide() {
+      if (this.currentYearIndex < Object.keys(this.variableData).length) {
+        clearTimeout(this.timeoutID);
+        this.drawCartogram(this.currentYearIndex, false);
+      } else {
+        this.$root.$emit(
+          'showSnackbar',
+          'Przejrzano wszystkie dostepne lata',
+          'error'
+        );
+      }
+    },
+    previousSlide() {
+      if (this.currentYearIndex > 1) {
+        clearTimeout(this.timeoutID);
+        this.currentYearIndex = this.currentYearIndex - 2;
+        this.drawCartogram(this.currentYearIndex, false);
+      } else {
+        this.$root.$emit(
+          'showSnackbar',
+          'Przejrzano wszystkie dostepne lata',
+          'error'
+        );
       }
     },
   },
   mounted() {
     this.createMap();
-    this.$root.$on('drawCartogram', this.drawCartogram);
+    this.$root.$on('drawCartogram', this.prepareData);
+    this.$root.$on('stopPresentation', this.stopPresentation);
+    this.$root.$on('startPresentation', this.startPresentation);
+    this.$root.$on('nextSlide', this.nextSlide);
+    this.$root.$on('previousSlide', this.previousSlide);
   },
 };
 </script>

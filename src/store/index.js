@@ -54,6 +54,7 @@ export default new Vuex.Store({
     variableData: {},
     colorBrew: new classyBrew(),
     currentYear: undefined,
+    timeout: 5000,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -86,6 +87,9 @@ export default new Vuex.Store({
     getCurrentYear(state) {
       return state.currentYear;
     },
+    getTimeout(state) {
+      return state.timeout;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
@@ -114,6 +118,9 @@ export default new Vuex.Store({
     },
     setCurrentYear(state, value) {
       state.currentYear = value;
+    },
+    setTimeout(state, value) {
+      state.timeout = value;
     },
   },
   actions: {
