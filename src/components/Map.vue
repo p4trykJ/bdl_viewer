@@ -1,6 +1,49 @@
 <template>
   <v-container pa-0 fluid>
-    <div id="map" class="map"></div>
+    <div id="map" class="map">
+      <v-row class="popup__wrapper">
+        <v-col>
+          <v-card class="card--popup">
+            <v-card-title>
+              Właściwości
+              <v-spacer></v-spacer>
+              <v-btn icon>
+                <v-icon @click="closePopup">
+                  mdi-close
+                </v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-list dense>
+                <v-list-item
+                  v-for="prop in selectedFeaturePropArray"
+                  :key="prop.name"
+                >
+                  <v-list-item-content>
+                    <v-row>
+                      <v-col cols="auto">
+                        <v-list-item-title
+                          class="statistics"
+                          v-text="prop.name"
+                          :title="prop.name"
+                        ></v-list-item-title>
+                      </v-col>
+                      <v-col>
+                        <v-list-item-subtitle
+                          class="statistics statistics__value"
+                          v-text="prop.value"
+                          :title="prop.value"
+                        ></v-list-item-subtitle>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -14,6 +57,7 @@ import TileLayer from 'ol/layer/Tile';
 import {OSM, XYZ} from 'ol/source';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
+import Overlay from 'ol/Overlay';
 import {GeoJSON} from 'ol/format';
 import {
   Style,
@@ -28,8 +72,10 @@ export default {
   data: () => ({
     indexToStartFrom: 0,
     timeoutID: undefined,
-    currentYearIndex: undefined,
+    currentItem: undefined,
     variableData: {},
+    overlay: undefined,
+    selectedFeaturePropArray: [],
   }),
   computed: {
     colorBrew() {
@@ -40,13 +86,24 @@ export default {
     // },
   },
   methods: {
+    closePopup() {
+      this.overlay.setPosition(undefined);
+    },
     createMap() {
+      this.overlay = new Overlay({
+        element: document.getElementsByClassName('popup__wrapper')[0],
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+      });
       this.map = new Map({
         target: 'map',
         view: new View({
           center: [1871831.8566897807, 6884288.3839664385],
           zoom: 6.6,
         }),
+        overlays: [this.overlay],
         controls: defaultControls(),
         layers: [
           new TileLayer({
@@ -77,6 +134,38 @@ export default {
           }),
         ],
       });
+      this.map.on('singleclick', e => {
+        const {coordinate, pixel} = e;
+        const featureAtPixel = this.map.getFeaturesAtPixel(pixel)[0];
+        if (!featureAtPixel) {
+          this.overlay.setPosition(undefined);
+          return;
+        }
+        const featureProperties = featureAtPixel.getProperties();
+        // eslint-disable-next-line camelcase
+        const {JPT_NAZWA_, Shape_Area} = featureProperties;
+        this.selectedFeaturePropArray = [
+          {
+            name: 'Nazwa',
+            value: JPT_NAZWA_,
+          },
+          {
+            name: 'Powierzchnia',
+            value: Shape_Area.toFixed(2),
+          },
+        ];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const key of Object.keys(featureProperties)) {
+          const [prefix, year] = key.split('@');
+          if (prefix === 'value') {
+            this.selectedFeaturePropArray.push({
+              name: `Wartość ${year}`,
+              value: featureProperties[key],
+            });
+          }
+        }
+        this.overlay.setPosition(coordinate);
+      });
       window.map = this.map;
     },
     getColorInRangeHandler(value) {
@@ -104,7 +193,7 @@ export default {
         const variableData = {};
         // create variableData property for every single year
         r.data.results[0].values.forEach(val => {
-          variableData[`value_${val.year}`] = [];
+          variableData[`value@${val.year}`] = [];
         });
         // fill array and add feature property for every single year
         r.data.results.forEach(res => {
@@ -113,7 +202,7 @@ export default {
           );
           res.values.forEach(obj => {
             const {year, val} = obj;
-            const propertyName = `value_${year}`;
+            const propertyName = `value@${year}`;
             variableData[propertyName].push(val);
             feature.set(propertyName, val);
           });
@@ -123,13 +212,13 @@ export default {
       });
     },
     drawCartogram(indexToStartFrom, auto = true) {
-      clearTimeout(this.timeoutID); // to be sure that there is no draw function running in the backgroud
+      clearTimeout(this.timeoutID); // to be sure that there is no draw function waiting in the backgroud
       const variableDataKeys = Object.keys(this.variableData);
-      this.currentYearIndex = indexToStartFrom;
+      this.currentItem = indexToStartFrom;
       const draw = () => {
-        if (this.currentYearIndex < variableDataKeys.length) {
-          const key = variableDataKeys[this.currentYearIndex];
-          this.$store.commit('setCurrentYear', key.split('_')[1]);
+        if (this.currentItem < variableDataKeys.length) {
+          const key = variableDataKeys[this.currentItem];
+          this.$store.commit('setCurrentYear', key.split('@')[1]);
           const data = this.variableData[key];
           this.colorBrew.setSeries(data);
           this.colorBrew.setNumClasses(
@@ -153,7 +242,7 @@ export default {
             return styles;
           });
           this.getLayerByName('units').changed();
-          this.currentYearIndex++;
+          this.currentItem++;
           if (auto) {
             this.$store.commit('setIsPresentationOnAuto', true);
             this.timeoutID = setTimeout(
@@ -172,32 +261,31 @@ export default {
       this.$store.commit('setIsPresentationOnAuto', false);
     },
     startPresentation() {
-      this.drawCartogram(--this.currentYearIndex, true);
+      this.drawCartogram(--this.currentItem, true);
     },
     nextSlide() {
-      if (this.currentYearIndex < Object.keys(this.variableData).length) {
+      if (this.currentItem < Object.keys(this.variableData).length) {
         clearTimeout(this.timeoutID);
-        this.drawCartogram(this.currentYearIndex, false);
+        this.drawCartogram(this.currentItem, false);
       } else {
-        this.$root.$emit(
-          'showSnackbar',
-          'Wyświetlono dane dla wszystkich wybranych lat',
-          'error'
-        );
+        this.onNoMoreYears();
       }
     },
     previousSlide() {
-      if (this.currentYearIndex > 1) {
+      if (this.currentItem > 1) {
         clearTimeout(this.timeoutID);
-        this.currentYearIndex -= 2;
-        this.drawCartogram(this.currentYearIndex, false);
+        this.currentItem -= 2;
+        this.drawCartogram(this.currentItem, false);
       } else {
-        this.$root.$emit(
-          'showSnackbar',
-          'Wyświetlono dane dla wszystkich wybranych lat',
-          'error'
-        );
+        this.onNoMoreYears();
       }
+    },
+    onNoMoreYears() {
+      this.$root.$emit(
+        'showSnackbar',
+        'Wyświetlono dane dla wszystkich wybranych lat',
+        'error'
+      );
     },
   },
   mounted() {
