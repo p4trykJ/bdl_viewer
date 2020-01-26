@@ -7,7 +7,7 @@
           item-text="text"
           return-object
           outlined
-          label="Zmienne"
+          label="Zmienna"
           :rules="[rules.required]"
           :items="variables"
           @change="getVariable()"
@@ -19,10 +19,11 @@
         <v-select
           v-model="chosenYears"
           :items="chosenVariable.years"
-          chips
           outlined
           label="Lata"
           multiple
+          chips
+          deletable-chips
           @blur="$emit('dataFilled')"
           :rules="[rules.required]"
         />

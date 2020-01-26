@@ -10,7 +10,8 @@
           :close-on-content-click="false"
           v-model="mainMenuVisible"
         >
-          <template #activator>
+          <!-- eslint-disable-next-line vue/no-unused-vars -->
+          <template #activator="{ on }">
             <v-btn v-show="!mainMenuVisible" @click="toggleMenu('mainMenu')">
               <v-icon>
                 mdi-settings-outline
@@ -87,7 +88,8 @@
           :close-on-content-click="false"
           v-model="legendMenuVisible"
         >
-          <template v-slot:activator>
+          <!-- eslint-disable-next-line vue/no-unused-vars -->
+          <template v-slot:activator="{on}">
             <v-btn
               color="primary"
               dark
