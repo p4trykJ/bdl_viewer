@@ -1,24 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-import classyBrew from 'classybrew';
+import ClassyBrew from 'classybrew';
 
 Vue.use(Vuex);
 
-/* eslint-disable */
 axios.interceptors.request.use(
   config => {
     config.baseURL = process.env.VUE_APP_BDL_API_URL;
     config.params = Object.assign(
-      {format: 'json', 'page-size': 100},
-      config.params
-    );
-    config.headers = Object.assign(
       {
-        // 'X-ClientId': process.env.VUE_APP_BDL_API_KEY,
-        // 'Access-Control-Allow-Origin': '*',
+        format: 'json',
+        'page-size': 100,
       },
-      config.headers
+      config.params
     );
     return config;
   },
@@ -31,9 +26,10 @@ axios.interceptors.response.use(
     if (config.statusText === 'OK') {
       return config;
     }
+    return false;
   },
   error => {
-    vm.$root.$emit(
+    window.vm.$root.$emit(
       'showSnackbar',
       error.response.data.errors[0].errorReason,
       'error'
@@ -51,7 +47,7 @@ export default new Vuex.Store({
     colorRamp: undefined,
     classifyMethod: undefined,
     classesAmount: undefined,
-    colorBrew: new classyBrew(),
+    colorBrew: new ClassyBrew(),
     currentYear: undefined,
     timeout: 5,
     isPresentationOnAuto: false,
@@ -167,7 +163,7 @@ export default new Vuex.Store({
       }
       return axios({
         method: 'get',
-        url: url,
+        url,
         params: {
           'aggregate-id': 1,
           'unit-level': 2,

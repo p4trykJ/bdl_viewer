@@ -10,7 +10,7 @@
           :close-on-content-click="false"
           v-model="mainMenuVisible"
         >
-          <template #activator="{on}">
+          <template #activator>
             <v-btn v-show="!mainMenuVisible" @click="toggleMenu('mainMenu')">
               <v-icon>
                 mdi-settings-outline
@@ -87,7 +87,7 @@
           :close-on-content-click="false"
           v-model="legendMenuVisible"
         >
-          <template v-slot:activator="{on}">
+          <template v-slot:activator>
             <v-btn
               color="primary"
               dark
@@ -162,7 +162,7 @@ export default {
   },
   data: () => ({
     // Main menu
-    mainMenuVisible: false,
+    mainMenuVisible: true,
     mainMenuTab: 0,
 
     // Legend
