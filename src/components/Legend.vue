@@ -12,7 +12,10 @@
               </span>
             </div>
           </v-subheader>
-          <v-list-item v-for="item in colorsBreaks" :key="item.color">
+          <v-list-item
+            v-for="item in colorsBreaks.slice().reverse()"
+            :key="item.color"
+          >
             <v-list-item-icon>
               <div
                 class="legend__rectangle"
