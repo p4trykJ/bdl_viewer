@@ -7,8 +7,8 @@
             <v-card-title>
               Właściwości
               <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon @click="closePopup">
+              <v-btn icon @click="closePopup">
+                <v-icon>
                   mdi-close
                 </v-icon>
               </v-btn>
@@ -140,15 +140,11 @@ export default {
         }
         const featureProperties = featureAtPixel.getProperties();
         // eslint-disable-next-line camelcase
-        const {JPT_NAZWA_, Shape_Area} = featureProperties;
+        const {JPT_NAZWA_} = featureProperties;
         this.selectedFeaturePropArray = [
           {
             name: 'Nazwa',
             value: JPT_NAZWA_,
-          },
-          {
-            name: 'Powierzchnia',
-            value: Shape_Area.toFixed(2),
           },
         ];
         // eslint-disable-next-line no-restricted-syntax

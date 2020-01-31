@@ -20,6 +20,7 @@ module.exports = {
         },
       },
     ],
+    'vue/no-unused-vars': 'off',
     'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
     'no-param-reassign': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
