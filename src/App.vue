@@ -21,12 +21,12 @@
       <v-row no-gutters class="px-4">
         <v-col cols="12">
           <v-subheader class="justify-center headline">
-            BDL Browser
+            BDL Viewer
           </v-subheader>
         </v-col>
         <v-col cols="12">
           <p class="text-justify subtitle-2">
-            BDL Browser jest aplikacją oferującą możliwość szybkiej i łatwej
+            BDL Viewer jest aplikacją oferującą możliwość szybkiej i łatwej
             prezentacji danych pochodzących z Banku Danych Lokalnych,
             udostępnianego przez Główny Urząd Statystyczny, w postaci
             kartogramów.
