@@ -89,7 +89,6 @@ export default {
     },
   },
   mounted() {
-    console.log(process.env);
     this.$root.$on('showSnackbar', this.showSnackbar);
   },
 };

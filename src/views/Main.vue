@@ -194,7 +194,6 @@ export default {
   methods: {
     accept() {
       this.$root.$emit('prepareDataset');
-      this.legendMenuVisible = true;
     },
     toggleMenu(menu) {
       this[`${menu}Visible`] = !this[`${menu}Visible`];
@@ -210,8 +209,13 @@ export default {
     onCartoFilled() {
       this.cartoFilled = true;
     },
+    onCartogramDrawn() {
+      this.legendMenuVisible = true;
+    },
   },
-  mounted() {},
+  mounted() {
+    this.$root.$on('cartogramDrawn', this.onCartogramDrawn);
+  },
 };
 </script>
 

@@ -247,6 +247,7 @@ export default {
           }
         }
       };
+      this.$root.$emit('cartogramDrawn');
       draw();
     },
     stopPresentation() {
