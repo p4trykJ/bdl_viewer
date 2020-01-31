@@ -65,7 +65,7 @@ import {
   Fill,
   // Circle
 } from 'ol/style';
-import {defaults as defaultControls} from 'ol/control';
+import {defaults as defaultControls, ScaleLine} from 'ol/control';
 
 export default {
   name: 'Map',
@@ -104,7 +104,7 @@ export default {
           zoom: 6.6,
         }),
         overlays: [this.overlay],
-        controls: defaultControls(),
+        controls: defaultControls().extend([new ScaleLine()]),
         layers: [
           new TileLayer({
             source: new XYZ({
