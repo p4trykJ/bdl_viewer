@@ -23,9 +23,9 @@ module.exports = {
     'vue/no-unused-vars': 'off',
     'no-plusplus': ['error', {allowForLoopAfterthoughts: true}],
     'no-param-reassign': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-    'prettier/prettier': 'error',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'warn',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'warn',
+    'prettier/prettier': 'warn',
   },
   parserOptions: {
     parser: 'babel-eslint',

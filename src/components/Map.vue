@@ -245,13 +245,14 @@ export default {
           } else {
             this.$store.commit('setIsPresentationOnAuto', false);
           }
+        } else {
+          this.$store.commit('setIsPresentationOnAuto', false);
         }
       };
       this.$root.$emit('cartogramDrawn');
       draw();
     },
     stopPresentation() {
-      clearTimeout(this.timeoutID);
       this.$store.commit('setIsPresentationOnAuto', false);
     },
     startPresentation() {
@@ -259,7 +260,6 @@ export default {
     },
     nextSlide() {
       if (this.currentItem < Object.keys(this.variableData).length) {
-        clearTimeout(this.timeoutID);
         this.drawCartogram(this.currentItem, false);
       } else {
         this.onNoMoreYears();
@@ -267,7 +267,6 @@ export default {
     },
     previousSlide() {
       if (this.currentItem > 1) {
-        clearTimeout(this.timeoutID);
         this.currentItem -= 2;
         this.drawCartogram(this.currentItem, false);
       } else {
