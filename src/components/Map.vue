@@ -100,8 +100,8 @@ export default {
       this.map = new Map({
         target: 'map',
         view: new View({
-          center: [1871831.8566897807, 6884288.3839664385],
-          zoom: 6.6,
+          center: [1989635.476455751, 6794918.483871997],
+          zoom: 6.85,
         }),
         overlays: [this.overlay],
         controls: defaultControls().extend([new ScaleLine()]),

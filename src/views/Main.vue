@@ -5,7 +5,6 @@
       <v-col>
         <v-menu
           transition="slide-x-transition"
-          :max-width="500"
           :close-on-click="false"
           :close-on-content-click="false"
           v-model="mainMenuVisible"
@@ -29,7 +28,13 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              <v-tabs grow centered center-active v-model="mainMenuTab">
+              <v-tabs
+                grow
+                centered
+                center-active
+                show-arrows
+                v-model="mainMenuTab"
+              >
                 <v-tab>
                   Kategoria
                 </v-tab>
@@ -83,7 +88,6 @@
       <v-col cols="12" sm="12">
         <v-menu
           transition="slide-x-reverse-transition"
-          :max-width="500"
           :close-on-click="false"
           :close-on-content-click="false"
           v-model="legendMenuVisible"
@@ -112,7 +116,13 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              <v-tabs grow centered center-active v-model="legendMenuTab">
+              <v-tabs
+                grow
+                centered
+                center-active
+                show-arrows
+                v-model="legendMenuTab"
+              >
                 <v-tab>
                   Symbolizacja
                 </v-tab>
@@ -166,7 +176,6 @@ export default {
     // Main menu
     mainMenuVisible: true,
     mainMenuTab: 0,
-
     // Legend
     legendMenuVisible: false,
     legendMenuTab: 0,
@@ -214,7 +223,7 @@ export default {
     },
   },
   mounted() {
-    this.$root.$on('cartogramDrawn', this.onCartogramDrawn);
+    this.$root.$once('cartogramDrawn', this.onCartogramDrawn);
   },
 };
 </script>
@@ -225,8 +234,7 @@ export default {
   z-index: 5;
 }
 .card--main {
-  width: 500px;
-  max-width: 100vw;
+  max-width: 400px;
 }
 .menu--main {
   top: 50px;
@@ -235,11 +243,12 @@ export default {
   bottom: 500px;
   right: 0;
 }
-.card--legend {
-  // min-width: 330px;
-  width: 350px;
-  max-width: 100vw;
+@media (min-width: 480px) {
+  .card--legend {
+    width: 340px;
+  }
 }
+
 .presentation__buttons {
   top: 10px;
   right: 50px;
