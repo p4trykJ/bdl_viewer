@@ -1,22 +1,32 @@
 <template>
   <v-row>
     <v-col>
-      <v-btn @click="previousSlide">
+      <v-btn class="button--ol" dark @click="previousSlide">
         <v-icon>
           mdi-skip-previous
         </v-icon>
       </v-btn>
-      <v-btn @click="nextSlide">
+      <v-btn class="button--ol" dark @click="nextSlide">
         <v-icon>
           mdi-skip-next
         </v-icon>
       </v-btn>
-      <v-btn @click="stopPresentation" v-show="isPresentationOnAuto">
+      <v-btn
+        class="button--ol"
+        dark
+        @click="stopPresentation"
+        v-show="isPresentationOnAuto"
+      >
         <v-icon>
           mdi-play-pause
         </v-icon>
       </v-btn>
-      <v-btn v-show="!isPresentationOnAuto" @click="startPresentation">
+      <v-btn
+        class="button--ol"
+        dark
+        v-show="!isPresentationOnAuto"
+        @click="startPresentation"
+      >
         <v-icon>
           mdi-play
         </v-icon>

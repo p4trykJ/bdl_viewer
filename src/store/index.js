@@ -51,6 +51,7 @@ export default new Vuex.Store({
     currentYear: undefined,
     timeout: 5,
     isPresentationOnAuto: false,
+    unitsLayerOpacity: 100,
   },
   getters: {
     getDrawerVisibility(state) {
@@ -86,6 +87,9 @@ export default new Vuex.Store({
     getIsPresentationOnAuto(state) {
       return state.isPresentationOnAuto;
     },
+    getUnitsLayerOpacity(state) {
+      return state.unitsLayerOpacity;
+    },
   },
   mutations: {
     setDrawerVisibility(state, value) {
@@ -117,6 +121,9 @@ export default new Vuex.Store({
     },
     setIsPresentationOnAuto(state, value) {
       state.isPresentationOnAuto = value;
+    },
+    setUnitsLayerOpacity(state, value) {
+      state.unitsLayerOpacity = value;
     },
   },
   actions: {

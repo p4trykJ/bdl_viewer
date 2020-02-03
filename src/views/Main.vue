@@ -91,6 +91,50 @@
       class="menu presentation__buttons"
     />
 
+    <v-row class="menu menu--opacitySlider">
+      <v-col cols="12" sm="12">
+        <v-menu
+          transition="slide-x-reverse-transition"
+          :close-on-content-click="false"
+          v-model="sliderMenuVisible"
+        >
+          <!-- eslint-disable-next-line vue/no-unused-vars -->
+          <template v-slot:activator="{on}">
+            <v-btn
+              class="button--ol"
+              title="Nieprzezroczystość warstwy jednostek"
+              dark
+              @click="toggleMenu('sliderMenu')"
+              v-show="!sliderMenuVisible"
+            >
+              <v-icon>
+                mdi-opacity
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-card class="card--opacitySlider mx-auto">
+            <v-card-title>
+              Nieprzezroczystość
+              <v-spacer></v-spacer>
+              <v-btn icon @click="toggleMenu('sliderMenu')">
+                <v-icon>
+                  mdi-close
+                </v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-slider
+                style="width: 150px;"
+                v-model="unitsLayerOpacity"
+                hide-details
+              >
+              </v-slider>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+      </v-col>
+    </v-row>
+
     <v-row class="menu menu--legend">
       <v-col cols="12" sm="12">
         <v-menu
@@ -187,6 +231,8 @@ export default {
     // Legend
     legendMenuVisible: false,
     legendMenuTab: 0,
+    // Slider
+    sliderMenuVisible: false,
     // Form filled variables
     categoryFilled: false,
     cartoFilled: false,
@@ -206,6 +252,14 @@ export default {
     },
     isFormFilled() {
       return this.cartoFilled && this.dataFilled && this.categoryFilled;
+    },
+    unitsLayerOpacity: {
+      get() {
+        return this.$store.getters.getUnitsLayerOpacity;
+      },
+      set(value) {
+        this.$store.commit('setUnitsLayerOpacity', value);
+      },
     },
   },
   methods: {
@@ -243,9 +297,9 @@ export default {
 }
 .menu--main {
   top: 50px;
-  .card--main {
-    max-width: 400px;
-  }
+}
+.card--main {
+  width: 400px;
 }
 .menu--legend {
   bottom: 500px;
@@ -262,5 +316,9 @@ export default {
   .presentation__list {
     list-style: none;
   }
+}
+.menu--opacitySlider {
+  top: 95px;
+  // right: 100px;
 }
 </style>

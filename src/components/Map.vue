@@ -81,9 +81,14 @@ export default {
     colorBrew() {
       return this.$store.getters.getColorBrew;
     },
-    // variableData() {
-    //   return this.$store.getters.getVariableData;
-    // },
+    unitsLayerOpacity() {
+      return this.$store.getters.getUnitsLayerOpacity;
+    },
+  },
+  watch: {
+    unitsLayerOpacity(val) {
+      this.getLayerByName('units').setOpacity(val / 100);
+    },
   },
   methods: {
     closePopup() {
