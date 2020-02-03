@@ -124,7 +124,6 @@
             </v-card-title>
             <v-card-text>
               <v-slider
-                style="width: 150px;"
                 v-model="unitsLayerOpacity"
                 hide-details
               >
