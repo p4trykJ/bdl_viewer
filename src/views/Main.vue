@@ -11,7 +11,14 @@
         >
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template #activator="{ on }">
-            <v-btn v-show="!mainMenuVisible" @click="toggleMenu('mainMenu')">
+            <v-btn
+              title="Ustawienia"
+              class="button--ol"
+              tile
+              dark
+              v-show="!mainMenuVisible"
+              @click="toggleMenu('mainMenu')"
+            >
               <v-icon>
                 mdi-settings-outline
               </v-icon>
@@ -95,7 +102,8 @@
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template v-slot:activator="{on}">
             <v-btn
-              color="primary"
+              class="button--ol"
+              title="Legenda i statystyki"
               dark
               @click="toggleMenu('legendMenu')"
               v-show="!legendMenuVisible"
@@ -233,11 +241,11 @@ export default {
   position: absolute;
   z-index: 5;
 }
-.card--main {
-  max-width: 400px;
-}
 .menu--main {
   top: 50px;
+  .card--main {
+    max-width: 400px;
+  }
 }
 .menu--legend {
   bottom: 500px;
@@ -248,7 +256,6 @@ export default {
     width: 340px;
   }
 }
-
 .presentation__buttons {
   top: 10px;
   right: 50px;

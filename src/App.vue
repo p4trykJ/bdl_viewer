@@ -95,10 +95,23 @@ export default {
 </script>
 
 <style lang="scss">
+$olButtonsColor: rgba(0, 60, 136, 0.5);
 .v-app-bar {
   left: unset !important;
   right: unset !important;
   box-shadow: unset !important;
   background-color: unset !important;
+}
+.button--ol {
+  background-color: $olButtonsColor !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: unset !important;
+  .v-icon {
+    font-size: 23px !important;
+  }
+  &:hover {
+    background-color: rgba(0, 60, 136, 0.7) !important;
+  }
 }
 </style>

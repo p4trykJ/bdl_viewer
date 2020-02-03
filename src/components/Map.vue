@@ -300,5 +300,8 @@ export default {
     left: unset;
     right: 0.5em !important;
   }
+  .ol-control {
+    background-color: unset !important;
+  }
 }
 </style>
