@@ -308,10 +308,10 @@ export default {
   left: 5px;
 }
 .menu--legend {
-  top: 300px !important;
+  top: 150px !important;
   right: 5px !important;
   left: unset !important;
-  bottom: unset !important;
+  bottom: auto !important;
 }
 @media (min-width: 480px) {
   .card--legend {
