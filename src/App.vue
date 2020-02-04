@@ -2,6 +2,8 @@
   <v-app>
     <v-app-bar absolute>
       <v-app-bar-nav-icon
+        class="button--ol button--radius"
+        dark
         @click="drawerVisibility = !drawerVisibility"
       ></v-app-bar-nav-icon>
     </v-app-bar>
@@ -101,6 +103,9 @@ $olButtonsColor: rgba(0, 60, 136, 0.5);
   right: unset !important;
   box-shadow: unset !important;
   background-color: unset !important;
+  .button--radius {
+    border-radius: 4px;
+  }
 }
 .button--ol {
   background-color: $olButtonsColor !important;

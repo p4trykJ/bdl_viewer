@@ -8,15 +8,15 @@
           :close-on-click="false"
           :close-on-content-click="false"
           v-model="mainMenuVisible"
+          offset-x
+          :nudge-right="5"
         >
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template #activator="{ on }">
             <v-btn
               title="Ustawienia"
               class="button--ol"
-              tile
               dark
-              v-show="!mainMenuVisible"
               @click="toggleMenu('mainMenu')"
             >
               <v-icon>
@@ -94,9 +94,11 @@
     <v-row class="menu menu--opacitySlider">
       <v-col cols="12" sm="12">
         <v-menu
-          transition="slide-x-reverse-transition"
+          transition="slide-x-transition"
           :close-on-content-click="false"
           v-model="sliderMenuVisible"
+          offset-x
+          :nudge-right="5"
         >
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template v-slot:activator="{on}">
@@ -105,7 +107,6 @@
               title="Nieprzezroczystość warstwy jednostek"
               dark
               @click="toggleMenu('sliderMenu')"
-              v-show="!sliderMenuVisible"
             >
               <v-icon>
                 mdi-opacity
@@ -123,39 +124,35 @@
               </v-btn>
             </v-card-title>
             <v-card-text>
-              <v-slider
-                v-model="unitsLayerOpacity"
-                hide-details
-              >
-              </v-slider>
+              <v-slider v-model="unitsLayerOpacity" hide-details> </v-slider>
             </v-card-text>
           </v-card>
         </v-menu>
       </v-col>
     </v-row>
-
-    <v-row class="menu menu--legend">
+    <v-btn
+      class="button--legend button--ol"
+      title="Legenda i statystyki"
+      dark
+      @click="toggleMenu('legendMenu')"
+    >
+      <v-icon>
+        mdi-map-legend
+      </v-icon>
+    </v-btn>
+    <v-row class="menu">
       <v-col cols="12" sm="12">
         <v-menu
+          content-class="menu--legend"
           transition="slide-x-reverse-transition"
           :close-on-click="false"
           :close-on-content-click="false"
           v-model="legendMenuVisible"
         >
           <!-- eslint-disable-next-line vue/no-unused-vars -->
-          <template v-slot:activator="{on}">
-            <v-btn
-              class="button--ol"
-              title="Legenda i statystyki"
-              dark
-              @click="toggleMenu('legendMenu')"
-              v-show="!legendMenuVisible"
-            >
-              <v-icon>
-                mdi-map-legend
-              </v-icon>
-            </v-btn>
-          </template>
+          <!-- <template v-slot:activator="{on}">
+        
+          </template> -->
           <v-card class="card--legend mx-auto">
             <v-card-title>
               Legenda
@@ -295,14 +292,26 @@ export default {
   z-index: 5;
 }
 .menu--main {
-  top: 50px;
+  top: 45px;
+  left: 5px;
 }
 .card--main {
   width: 400px;
 }
+.menu--opacitySlider {
+  top: 90px;
+  left: 5px;
+}
+.button--legend {
+  position: absolute;
+  top: 147px;
+  left: 5px;
+}
 .menu--legend {
-  bottom: 500px;
-  right: 0;
+  top: 300px !important;
+  right: 5px !important;
+  left: unset !important;
+  bottom: unset !important;
 }
 @media (min-width: 480px) {
   .card--legend {
@@ -315,9 +324,5 @@ export default {
   .presentation__list {
     list-style: none;
   }
-}
-.menu--opacitySlider {
-  top: 95px;
-  // right: 100px;
 }
 </style>
