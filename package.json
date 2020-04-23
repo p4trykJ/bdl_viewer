@@ -1,5 +1,5 @@
 {
-  "name": "BDL-Viewer",
+  "name": "bdl_viewer",
   "version": "0.1.0",
   "private": true,
   "scripts": {
